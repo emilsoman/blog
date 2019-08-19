@@ -1,0 +1,17 @@
+baseurl = "https://emilsoman.com"
+title = "Emil Soman"
+author = "Emil Soman"
+canonifyurls = true
+languagecode = "en"
+theme = "hugo-tanka"
+
+googleAnalytics = ""
+disable_mathjax = true
+
+pygmentsstyle      = "vs"
+pygmentscodefences = true
+
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+
+[params]
+  sitename = "Emil Soman"
