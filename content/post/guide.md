@@ -1,6 +1,7 @@
 ---
 title: "Guide to working with me"
 date: 2019-10-08T14:40:13+05:30
+url: "/guide"
 ---
 
 Here's my "How to work with me" guide.
