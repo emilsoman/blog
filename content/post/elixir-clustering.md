@@ -20,7 +20,7 @@ Readme is pasted below for quick reference.
 
 ## How to use swarm + libcluster
 
-Relevant lines of code:
+Relevant lines of code from example code https://github.com/emilsoman/elixir_clustering:
 
 1. swarm and libcluster added in mix.exs
 2. A new dynamic supervisor created at `lib/my_app/dynamic_supervisor.ex`
