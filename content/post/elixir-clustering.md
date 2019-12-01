@@ -84,3 +84,45 @@ SingletonWorker running on :"b@<hostname>"
 [swarm on b@<hostname>] [tracker:do_track] started SingletonName on b@<hostname>
 [swarm on b@<hostname>] [tracker:handle_topology_change] topology change complete
 ```
+
+## Starting a scheduler process
+
+Using SchedEx, creating a job that prints "Hello world" every minute:
+
+```
+schedex_child_spec = %{id: "every_minute", start: {SchedEx, :run_every, [IO, :inspect, ["Hello world"], "* * * * *"]}}
+Swarm.register_name(MyAppScheduler, __MODULE__, :register, [schedex_child_spec])
+```
+
+Adding this to the supervision tree:
+
+```
+defmodule MyApp.Application do
+  use Application
+
+  def start(_type, _args) do
+    distributed_workers =
+      %{
+        id: SlashTeam.StartupSupervisor,
+        restart: :transient,
+        start:
+        {Task, :start_link,
+          [
+            fn ->
+              schedex_child_spec = %{id: "every_minute", start: {SchedEx, :run_every, [IO, :inspect, ["Hello world"], "* * * * *"]}}
+              Swarm.register_name(MyAppScheduler, __MODULE__, :register, [schedex_child_spec])
+            end
+          ]}
+      }
+
+    children = [
+      {Cluster.Supervisor, [Application.get_env(:libcluster, :topologies), [name: MyApp.ClusterSupervisor]]},
+      {DynamicSupervisor, strategy: :one_for_one, name: MyApp.DynamicSupervisor},
+      distributed_workers
+    ]
+
+    opts = [strategy: :one_for_one, name: MyApp.Supervisor]
+    Supervisor.start_link(children, opts)
+  end
+end
+```
