@@ -7,3 +7,14 @@
 #nav a {
   text-decoration: underline;
 }
+
+blockquote {
+  text-align: left;
+  border-left: 3px dashed #ddd;
+  margin: 0px 50px 0px 50px;
+  padding: 30px 30px 30px 50px
+}
+
+blockquote:before,blockquote:after {
+  content: "";
+}
