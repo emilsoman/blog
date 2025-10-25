@@ -1,18 +1,18 @@
 ---
 title: "Guide to working with me"
 date: 2019-10-08T14:40:13+05:30
-url: "/guide"
+permalink: "/guide/"
 ---
 
 Here's my "How to work with me" guide.
 
 ### 1. Permission to be candid that works both ways
+
 If you're working with me closely, I'll ask for your permission to be candid
 about things at work. I will truly care for your growth and your well being as long as you work with me.
 For this, we need to have fearless communication between us.
 
 ### 2. Communicating at work
-
 
 **Meetings**
 
@@ -34,16 +34,15 @@ If emotions are driving decisions or if you're having a bad time
 and not in a mood to discuss something, please say so and I shall not pry and
 leave you alone with no judgement.
 
-
 ### 3. Being resourceful
+
 If you meet an obstacle and you want help from me, I'll expect you to have tried
 solving it yourself if it's part of your work. Most questions have answers on google.
 I'm only useful if my experience makes me better at solving this particular problem
 than the combined power of google + your decision making.
 
-
-
 ### 4. Remote and async communication
+
 I work remotely a lot, and I use this time to focus on work without distractions.
 If you message me at this time, my replies will be asynchronous. That means,
 if your work blocks on my response, you should move on with other work. If

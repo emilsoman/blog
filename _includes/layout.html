@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title }} | Emil Soman</title>
+  </head>
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer" />
+
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/app.css" />
+
+    <title>{{ title }} | Emil Soman</title>
+    <link rel="canonical" href="/" />
+
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      href="/index.xml"
+      title="Emil Soman"
+    />
+  </head>
+  <body>
+    <section id="nav">
+      <h1><a href="/">Emil Soman</a></h1>
+      <p class="site-description">
+        Programmer, founder. Currently building AI agents. YC alum.
+        <br />
+        Author of <a href="https://github.com/fika-lang/fika">Fika lang</a> - a
+        statically typed programming language.
+
+        <br />
+        I mostly talk about tech and startups.
+        <br />
+        Linkedin
+        <a href="https://www.linkedin.com/in/emilsoman/">/emilsoman</a>.
+      </p>
+    </section>
+    <section id="content">
+      {% if tags contains "post" %}
+      <h1>{{ title }}</h1>
+
+      <div id="sub-header">{{ date | date: "%Y/%m/%d" }}</div>
+      <div class="entry-content">{{ content }}</div>
+      {% else %} {{ content }} {% endif %}
+    </section>
+  </body>
+</html>

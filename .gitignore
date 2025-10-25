@@ -1,1 +1,6 @@
 /public
+
+# Ignore everything in _site except favicon
+_site/*
+!_site/favicon.png
+!_site/app.css
