@@ -1,6 +1,6 @@
 ---
 title: "What I learned from my Himalayan trek"
-date: 2014-12-14 03:05:49 +0530
+date: 2014-12-14
 ---
 
 1. Pain is inevitable. Suffering is optional.
