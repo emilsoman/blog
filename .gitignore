@@ -4,3 +4,4 @@
 _site/*
 !_site/favicon.png
 !_site/app.css
+!_site/images/
