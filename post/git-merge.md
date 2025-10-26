@@ -9,7 +9,7 @@ date: 2025-10-26
 - If you like rebasing so you can remove your WIP commits, please don't. WIP commits are OK. The more commits you have, the better, because commit messages are like logs. When debugging, I'd rather have DEBUG level logs than INFO level logs.
 - If you're worried about readability of git log, just use a git alias that gives you a pretty view of the history. Here's one you can use (replace YOUR_ORG/YOUR_REPO with your github repo):
 
-![Screenshot of git prlog alias output](/images/gitprlog.png)
+<img src="/images/gitprlog.png" alt="Screenshot of git prlog alias output" loading="lazy">
 
 ```bash
 git log main --first-parent --merges --grep='^Merge pull request' \
