@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ title }} | Emil Soman</title>
-  </head>
-
-  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="referrer" content="no-referrer" />
@@ -14,15 +8,25 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" href="/app.css" />
 
-    <title>{{ title }} | Emil Soman</title>
-    <link rel="canonical" href="/" />
+    <title>
+      {% if title %}{{ title }} | Emil Soman{% else %}Emil Soman{% endif %}
+    </title>
+    <link rel="canonical" href="{{ page.url }}" />
 
-    <link
-      rel="alternate"
-      type="application/rss+xml"
-      href="/index.xml"
-      title="Emil Soman"
-    />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-B9SDVWTHSX"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-B9SDVWTHSX");
+    </script>
   </head>
   <body>
     <section id="nav">
