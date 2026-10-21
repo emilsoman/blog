@@ -1,0 +1,1550 @@
+---
+permalink: /the-ai-century/index.html
+templateEngineOverride: false
+eleventyExcludeFromCollections: true
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+</head>
+<body>
+<title>The AI Century</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Matches emilsoman.com (app.css): system font stack, #333 ink, #738491 muted, white page, 700px column, light only.
+   Art direction: an ink-drawn world. A living horizon at the top, a hand-drawn ink lane, crossroads at each branch point,
+   printed objects from the future, and a postcard from 2126 at the end. */
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --tint: #f7f7f7;
+  --paper: #fbf9f4;
+  --ink: #333333;
+  --muted: #738491;
+  --faint: #aab4bb;
+  --line: #e2e5e8;
+  --trunk: #5d6972;
+  --c-slow: #9a620f;
+  --c-shared: #0b7a69;
+  --c-owners: #a2316b;
+  --c-blocs: #3c51b0;
+  --c-crisis: #bb4b19;
+  --c-normal: #5f7a1f;
+  --c-lost: #5b4a8b;
+  --alert: #c0392b;
+  --f-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --f-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  --f-serif: Georgia, "Times New Roman", Times, serif;
+  --shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  --yw: 60px;
+  --gw: 48px;
+  --sky: 150px;
+  color-scheme: light;
+}
+@media (max-width: 640px) { :root { --yw: 44px; --gw: 32px; --sky: 104px; } }
+
+* { box-sizing: border-box; }
+html, body { overflow-x: clip; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 17px; line-height: 28px;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+  padding-block: 60px 80px;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+.wrap { max-width: 700px; margin: 0 auto; display: grid; gap: 24px; }
+h1, h2, h3 { font-weight: 600; line-height: 120%; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+a { color: var(--ink); }
+button { font-family: inherit; color: inherit; }
+button:focus-visible, summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.hint { font-size: 14px; color: var(--muted); }
+
+/* Header */
+header { display: grid; gap: 14px; }
+h1 { font-size: 30px; }
+#sub-header { color: var(--muted); font-size: 15px; margin: -6px 4px 0; }
+.note { font-size: 15px; line-height: 1.6; color: var(--muted); border-left: 3px dashed #ddd; padding: 4px 0 4px 20px; }
+
+
+/* Sticky horizon */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; margin-inline: calc(50% - 50vw); background: var(--bg); }
+.scene { position: relative; height: var(--sky); }
+#sky { display: block; width: 100%; height: 100%; }
+.scene-in { position: absolute; inset: auto 0 6px 0; padding-inline: max(20px, env(safe-area-inset-left, 0px)) max(20px, env(safe-area-inset-right, 0px)); pointer-events: none; }
+.now { max-width: 700px; margin: 0 auto; display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 12px; }
+.now > * { background: rgba(255, 255, 255, .86); padding: 0 6px; border-radius: 3px; }
+.now-year { font: 600 26px/1.15 var(--f-mono); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.now-era { font-weight: 600; font-size: 16px; }
+.now-path { font-weight: 600; font-size: 14px; color: var(--pc); }
+.jumps-wrap { border-bottom: 1px solid var(--line); padding: 6px max(20px, env(safe-area-inset-right, 0px)) 7px max(20px, env(safe-area-inset-left, 0px)); }
+.jumps { max-width: 700px; margin: 0 auto; display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+.jumps::-webkit-scrollbar { display: none; }
+.jump { flex: none; font: 400 13px/1 var(--f-mono); color: var(--muted); background: none; border: 0; border-radius: 3px; padding: 6px 7px; cursor: pointer; font-variant-numeric: tabular-nums; }
+.jump:hover { color: var(--ink); }
+.jump.on { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+
+/* Timeline */
+.tl { position: relative; }
+#lanes { position: absolute; top: 0; left: var(--yw); width: var(--gw); pointer-events: none; z-index: 2; overflow: visible; }
+.row { display: grid; grid-template-columns: var(--yw) var(--gw) minmax(0, 1fr); }
+.row.empty { height: 22px; }
+.row .yl { font: 400 11px/22px var(--f-mono); color: var(--faint); font-variant-numeric: tabular-nums; }
+.row.decade .yl { color: var(--muted); }
+.row.full { padding-block: 12px; }
+.row.full .yl { font: 600 15px/26px var(--f-mono); color: var(--ink); }
+.evs { display: grid; gap: 10px; min-width: 0; }
+.evs > * { min-width: 0; }
+
+.era-row { display: grid; grid-template-columns: var(--yw) var(--gw) minmax(0, 1fr); padding-block: 34px 8px; }
+.era-box { display: grid; gap: 4px; min-width: 0; }
+.era-y { font-size: 15px; color: var(--muted); }
+.era-box h2 { font-size: 25px; }
+.era-box p { font-size: 15px; line-height: 1.6; color: var(--muted); }
+
+.ev p { font-size: 16px; line-height: 26px; }
+.note-ev p { font-size: 15px; line-height: 1.6; font-style: italic; color: var(--muted); border-left: 3px dashed #ddd; padding-left: 14px; }
+
+.chapter { display: grid; gap: 4px; padding-block: 6px 4px; }
+.chapter .ck { font-size: 14px; color: var(--muted); }
+.chapter h3 { font-size: 28px; color: var(--pc); letter-spacing: -.01em; }
+.chapter p { font-size: 16px; line-height: 1.6; font-style: italic; color: var(--ink); max-width: 56ch; }
+
+/* Crossroads: preview panels */
+.xroad { display: grid; gap: 0; padding-block: 8px 6px; }
+.xr-k { font-size: 14px; color: var(--muted); }
+.xroad h3 { font-size: 26px; margin-top: 2px; }
+.xr-hint { font-size: 14px; line-height: 1.45; color: var(--muted); margin-top: 4px; }
+.xr-fork { display: block; width: 100%; height: 44px; margin-top: 8px; overflow: visible; }
+.xr-panels { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 12px; }
+.xp { position: relative; font: inherit; color: inherit; text-align: left; cursor: pointer; padding: 0; background: #fff; border: 1.5px solid var(--line); border-radius: 8px; overflow: hidden;
+  display: grid; align-content: start; transition: opacity .18s, transform .18s, box-shadow .18s, border-color .18s; }
+.xp canvas { display: block; width: 100%; aspect-ratio: 16 / 10; border-bottom: 1px solid var(--line); }
+.xp-body { padding: 10px 12px 12px; display: grid; gap: 3px; }
+.xp-t { font-weight: 600; font-size: 17px; line-height: 1.25; }
+.xp-d { font-size: 14px; line-height: 1.45; color: var(--muted); }
+.xp-to { font: 12.5px/1.4 var(--f-mono); color: var(--ink); margin-top: 6px; display: flex; align-items: center; gap: 6px; }
+.xp-to::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--pc); }
+.xp[aria-pressed="false"] { opacity: .5; }
+.xp[aria-pressed="false"]:hover { opacity: 1; transform: translateY(-2px); box-shadow: var(--shadow); }
+.xp[aria-pressed="true"] { border-color: #1a1a1a; box-shadow: var(--shadow); }
+.xp-yr { position: absolute; top: 8px; right: 8px; font: 11px/1 var(--f-mono); background: #fff; border: 1px solid #1a1a1a; padding: 3px 5px; border-radius: 2px; }
+.xp-p { font: 600 13px/1.4 var(--f-mono); color: var(--ink); margin-top: 6px; }
+.xp-p .lk { font: 600 11px/1 var(--f-body); background: #1a1a1a; color: #fff; border-radius: 3px; padding: 2px 6px; margin-left: 6px; vertical-align: 1px; }
+.xr-odds { font-size: 13.5px; line-height: 1.45; color: var(--muted); margin-top: 8px; }
+.xr-why { font-size: 14px; line-height: 1.55; color: var(--ink); margin: 6px 0 0; max-width: 62ch; }
+.xp-badge { position: absolute; top: 8px; left: 8px; background: #1a1a1a; color: #fff; font-size: 12px; line-height: 1; padding: 4px 7px; border-radius: 3px; }
+.xroad details { margin-top: 10px; }
+.xroad summary { cursor: pointer; font-size: 14px; line-height: 1.45; color: var(--muted); }
+.xroad details ul { margin: 6px 0 0; padding-left: 20px; display: grid; gap: 2px; font-size: 15px; line-height: 1.55; }
+.cnb { stroke: #1a1a1a; stroke-width: 2.5; stroke-linecap: round; }
+.signs { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 16px; margin-top: 10px; }
+.sign { border-top: 3px solid var(--pc); padding-top: 6px; min-width: 0; }
+.sign-h { font-weight: 600; font-size: 14px; line-height: 1.35; }
+.xroad .sign ul { margin: 4px 0 0; padding-left: 18px; font-size: 14.5px; line-height: 1.5; gap: 4px; }
+@media (max-width: 560px) { .xr-panels, .signs { grid-template-columns: 1fr; } .xr-fork { display: none; } }
+.grow { stroke-dasharray: 1; stroke-dashoffset: 1; animation: grow 1.1s cubic-bezier(.3,.1,.2,1) forwards; }
+@keyframes grow { to { stroke-dashoffset: 0; } }
+
+/* Objects from the future */
+.art { justify-self: start; max-width: 100%; transform: rotate(var(--rot, 0deg)); margin: 6px 0 10px; display: grid; gap: 6px; }
+.art .cap { font-size: 13px; color: var(--muted); font-style: italic; transform: rotate(calc(var(--rot, 0deg) * -1)); }
+.obj { box-shadow: var(--shadow); background: var(--surface); color: #222; }
+
+.o-mail { width: min(470px, 100%); border-radius: 8px; overflow: hidden; font-size: 14.5px; line-height: 1.55; }
+.o-mail .bar2 { background: #eceef0; padding: 6px 12px; display: flex; gap: 6px; }
+.o-mail .bar2 i { width: 9px; height: 9px; border-radius: 50%; background: #c9ced3; }
+.o-mail dl { margin: 0; padding: 10px 16px 8px; display: grid; grid-template-columns: auto 1fr; gap: 0 10px; border-bottom: 1px solid #eee; font-size: 13.5px; }
+.o-mail dt { color: #888; } .o-mail dd { margin: 0; }
+.o-mail .body { padding: 12px 16px 16px; display: grid; gap: 10px; }
+
+.o-phone { width: min(300px, 100%); border-radius: 30px; background: #1d2024; padding: 14px 12px 18px; color: #fff; }
+.o-phone .clock { text-align: center; font-size: 44px; font-weight: 300; line-height: 1.1; letter-spacing: -.02em; }
+.o-phone .date { text-align: center; font-size: 13px; opacity: .75; margin-bottom: 12px; }
+.o-phone .nt { background: rgba(255,255,255,.14); border-radius: 14px; padding: 8px 11px; margin-top: 7px; font-size: 13px; line-height: 1.4; }
+.o-phone .nt b { display: block; font-size: 11.5px; opacity: .7; font-weight: 600; letter-spacing: .02em; }
+.o-phone .nt.red { background: rgba(192,57,43,.85); }
+
+.o-news { width: min(500px, 100%); background: #f6f3ea; padding: 14px 18px 18px; font-family: var(--f-serif); color: #1e1e1e; }
+.o-news .mast { text-align: center; font-size: 30px; font-weight: 700; letter-spacing: .01em; border-bottom: 3px double #1e1e1e; padding-bottom: 4px; font-family: "Times New Roman", Georgia, serif; }
+.o-news .dl { display: flex; justify-content: space-between; font-size: 11.5px; border-bottom: 1px solid #1e1e1e; padding: 3px 0; margin-bottom: 10px; font-family: var(--f-body); color: #444; }
+.o-news .hd { font-size: 26px; line-height: 1.12; font-weight: 700; text-wrap: balance; }
+.o-news .dk { font-size: 15px; line-height: 1.45; margin-top: 8px; font-style: italic; color: #333; }
+.o-news .cols { columns: 2; column-gap: 16px; column-rule: 1px solid #c9c3b4; font-size: 12.5px; line-height: 1.45; margin-top: 10px; color: #333; }
+
+.o-alert { width: min(420px, 100%); border-radius: 14px; background: #fff; border: 2px solid var(--alert); padding: 12px 16px 14px; font-size: 15px; line-height: 1.5; }
+.o-alert .h { color: var(--alert); font-weight: 700; letter-spacing: .04em; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+.o-alert .h::before { content: "!"; width: 18px; height: 18px; border-radius: 50%; background: var(--alert); color: #fff; display: grid; place-items: center; font-size: 12px; }
+.o-alert p + p { margin-top: 6px; }
+.o-alert .upd { color: #555; font-size: 14px; border-top: 1px solid #eee; padding-top: 6px; margin-top: 8px; }
+
+.o-doc { width: min(460px, 100%); background: var(--paper); padding: 22px 26px 26px; font-family: var(--f-serif); font-size: 14.5px; line-height: 1.6; position: relative; }
+.o-doc .t { text-align: center; font-size: 17px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; margin-bottom: 12px; line-height: 1.35; }
+.o-doc p + p { margin-top: 8px; }
+.stamp { position: absolute; right: 18px; bottom: 14px; width: 104px; height: 104px; border: 3px solid var(--sc, var(--alert)); border-radius: 50%; color: var(--sc, var(--alert)); display: grid; place-items: center; text-align: center; font: 700 12px/1.2 var(--f-body); letter-spacing: .06em; transform: rotate(-14deg); opacity: .78; padding: 8px; }
+.stamp::before { content: ""; position: absolute; inset: 5px; border: 1px solid currentColor; border-radius: 50%; }
+
+.o-slip { width: min(440px, 100%); padding: 16px 20px 18px; font-size: 14px; line-height: 1.5; border-top: 6px solid var(--pc); }
+.o-slip .t { font-weight: 700; font-size: 18px; }
+.o-slip .s { color: #777; font-size: 13px; margin-bottom: 10px; }
+.o-slip table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.o-slip td { padding: 5px 0; border-bottom: 1px solid #eee; }
+.o-slip td:last-child { text-align: right; font-family: var(--f-mono); }
+.o-slip tr.tot td { font-weight: 700; border-bottom: 0; padding-top: 9px; }
+
+.o-receipt { width: min(270px, 100%); background: #fff; padding: 16px 16px 26px; font: 12.5px/1.55 var(--f-mono); color: #222;
+  -webkit-mask: radial-gradient(circle 6px at 50% 100%, transparent 98%, #000) 0 0 / 14px 100% repeat-x; mask: radial-gradient(circle 6px at 50% 100%, transparent 98%, #000) 0 0 / 14px 100% repeat-x; }
+.o-receipt .c { text-align: center; }
+.o-receipt .row2 { display: flex; justify-content: space-between; gap: 8px; }
+.o-receipt hr { border: 0; border-top: 1px dashed #999; margin: 7px 0; }
+
+.o-card { width: min(330px, 100%); aspect-ratio: 1.586; border-radius: 14px; padding: 18px 20px; color: #fff; display: grid; align-content: space-between;
+  background: linear-gradient(135deg, #2b1b26 0%, var(--c-owners) 70%, #d48ab0 100%); }
+.o-card .brand { font-weight: 700; letter-spacing: .18em; font-size: 15px; }
+.o-card .chipx { width: 38px; height: 28px; border-radius: 5px; background: linear-gradient(135deg, #e8d29a, #b89a52); }
+.o-card .bal { font: 600 22px var(--f-mono); }
+.o-card .sm { font-size: 11.5px; opacity: .8; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 10px; }
+
+.o-permit { width: min(400px, 100%); background: #eef1f8; border: 1px solid #c8cfe0; padding: 16px 18px 20px; font-size: 13.5px; line-height: 1.5; position: relative;
+  background-image: repeating-linear-gradient(45deg, rgba(60,81,176,.05) 0 2px, transparent 2px 9px); }
+.o-permit .t { font-weight: 700; letter-spacing: .12em; font-size: 14px; color: var(--c-blocs); margin-bottom: 8px; }
+.o-permit dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; }
+.o-permit dt { color: #667; } .o-permit dd { margin: 0; font-family: var(--f-mono); font-size: 13px; }
+.o-permit .stamp { width: 92px; height: 92px; right: 14px; bottom: 10px; font-size: 11px; }
+
+.o-cert { width: min(440px, 100%); background: var(--paper); padding: 10px; }
+.o-cert .in { border: 2px solid #8a7a52; outline: 1px solid #8a7a52; outline-offset: 3px; padding: 18px 22px 20px; text-align: center; font-family: var(--f-serif); display: grid; gap: 6px; }
+.o-cert .t { font-size: 20px; font-weight: 700; }
+.o-cert .big { font-size: 28px; font-style: italic; }
+.o-cert .sm { font-size: 13px; color: #555; font-family: var(--f-body); }
+
+.o-med { width: min(420px, 100%); padding: 16px 20px 18px; font-size: 14px; line-height: 1.5; }
+.o-med .t { font-weight: 700; font-size: 16px; display: flex; justify-content: space-between; }
+.o-med .t span { color: #888; font-weight: 400; font-size: 13px; }
+.o-med .ages { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+.o-med .ages div { background: #f4f6f7; border-radius: 8px; padding: 8px 12px; }
+.o-med .ages b { display: block; font: 600 30px/1.1 var(--f-mono); }
+.o-med .ages .good b { color: var(--c-shared); }
+
+.o-ticket { width: min(470px, 100%); display: grid; grid-template-columns: 1fr 110px; border-radius: 10px; overflow: hidden; font-size: 13px; line-height: 1.45; }
+.o-ticket .m { padding: 14px 16px; background: #fff; border-right: 2px dashed #d0d4d8; }
+.o-ticket .s { padding: 14px 12px; background: #f4f6f7; display: grid; align-content: space-between; }
+.o-ticket .t { font-weight: 700; letter-spacing: .14em; font-size: 12px; color: var(--c-shared); }
+.o-ticket .route2 { font-size: 22px; font-weight: 700; margin: 4px 0 8px; font-family: var(--f-mono); }
+.o-ticket dl { margin: 0; display: grid; grid-template-columns: repeat(3, auto); gap: 0 16px; }
+.o-ticket dt { color: #888; font-size: 11px; } .o-ticket dd { margin: 0; font-family: var(--f-mono); }
+.o-ticket .bc { height: 46px; background: repeating-linear-gradient(90deg, #222 0 2px, transparent 2px 4px, #222 4px 5px, transparent 5px 8px, #222 8px 11px, transparent 11px 13px); }
+
+.o-tags { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; }
+.tag { position: relative; background: #fff; box-shadow: var(--shadow); padding: 12px 18px 12px 30px; clip-path: polygon(16px 0, 100% 0, 100% 100%, 16px 100%, 0 50%); min-width: 170px; }
+.tag::before { content: ""; position: absolute; left: 13px; top: 50%; width: 8px; height: 8px; border-radius: 50%; background: #ccc; transform: translateY(-50%); }
+.tag .n { font-size: 13.5px; color: #555; line-height: 1.35; }
+.tag .p { font: 700 24px/1.2 var(--f-mono); }
+
+.o-letter { width: min(460px, 100%); background: var(--paper); padding: 22px 26px 24px; font-family: var(--f-serif); font-size: 14.5px; line-height: 1.6; position: relative; }
+.o-letter .lh { display: flex; justify-content: space-between; font-family: var(--f-body); font-size: 12px; color: #777; border-bottom: 1px solid #ddd; padding-bottom: 8px; margin-bottom: 12px; }
+.o-letter p + p { margin-top: 8px; }
+
+.o-chat { width: min(340px, 100%); background: #f2f4f5; border-radius: 14px; padding: 10px 12px 12px; font-size: 14px; line-height: 1.4; display: grid; gap: 6px; }
+.o-chat .ch { font-weight: 600; font-size: 12.5px; color: #666; text-align: center; padding-bottom: 5px; border-bottom: 1px solid #e1e4e6; }
+.o-chat .b { justify-self: start; max-width: 82%; padding: 6px 10px; border-radius: 12px; background: #fff; }
+.o-chat .b b { display: block; font-size: 11.5px; color: #888; font-weight: 600; }
+.o-chat .b.r { justify-self: end; background: #d9efe9; }
+
+.hand { font-family: "Bradley Hand", "Segoe Print", "Comic Sans MS", cursive; }
+.o-report { width: min(480px, 100%); background: var(--paper); padding: 16px 18px 18px; font-size: 13.5px; line-height: 1.45; }
+.o-report .t { font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+.o-report table { width: 100%; border-collapse: collapse; }
+.o-report th { text-align: left; font-size: 12px; font-weight: 600; color: #777; border-bottom: 1.5px solid #333; padding: 4px 8px 4px 0; }
+.o-report td { padding: 6px 8px 6px 0; border-bottom: 1px solid #e3ddcf; vertical-align: top; }
+.o-report td.g { font-size: 20px; font-weight: 700; color: #b03a2e; }
+.o-report .rule { margin-top: 9px; font-style: italic; color: #555; }
+
+.o-ad { width: min(300px, 100%); background: #f6f3ea; border: 1.5px solid #1e1e1e; padding: 10px 14px 12px; font-family: var(--f-serif); font-size: 14px; line-height: 1.45; color: #1e1e1e; }
+.o-ad .h { font: 700 14px var(--f-body); letter-spacing: .16em; border-bottom: 1px solid #1e1e1e; padding-bottom: 5px; margin-bottom: 7px; text-align: center; }
+.o-ad p + p { margin-top: 6px; }
+.o-ad .c { font-style: italic; color: #444; }
+
+.o-cal { width: min(320px, 100%); border-top: 20px solid var(--c-shared); padding: 10px 14px 12px; font-size: 14px; }
+.o-cal .t { font-weight: 700; margin-bottom: 4px; }
+.o-cal ul { list-style: none; margin: 0; padding: 0; }
+.o-cal li { display: grid; grid-template-columns: 46px 1fr; align-items: baseline; border-bottom: 1px solid #eee; padding: 3px 0; }
+.o-cal li b { font: 600 12px var(--f-mono); color: #888; }
+.o-cal li span { font-size: 16px; color: #1f3f8a; }
+
+.o-sign { width: min(320px, 100%); display: grid; justify-items: center; }
+.o-sign .board { width: 100%; background: #c9a46e; background-image: repeating-linear-gradient(0deg, rgba(0,0,0,.05) 0 2px, transparent 2px 7px); padding: 24px 18px; text-align: center;
+  font: 700 28px/1.15 "Marker Felt", "Chalkboard SE", "Comic Sans MS", cursive; color: #1d1d1d; text-transform: uppercase; box-shadow: var(--shadow); }
+.o-sign .stick { width: 12px; height: 64px; background: #a07b48; }
+
+/* Lane */
+.ink { stroke: none; }
+.cn { stroke: #dfe3e6; stroke-width: 1; }
+.dt { stroke: #fff; stroke-width: 2; }
+.nd circle { fill: #fff; stroke: var(--ink); stroke-width: 2; }
+.nd text { fill: var(--ink); font: 600 11px var(--f-mono); text-anchor: middle; dominant-baseline: central; }
+
+/* Rail */
+.rail { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); top: 220px; bottom: 40px; width: 52px; z-index: 15; display: none; cursor: pointer; }
+.rail-in { position: absolute; inset: 0 0 0 30px; border-left: 1px solid var(--line); }
+.rail .tk { position: absolute; left: 4px; height: 2px; width: 10px; border-radius: 1px; }
+.rail .dl { position: absolute; left: -30px; font: 400 9.5px var(--f-mono); color: var(--faint); transform: translateY(-50%); }
+.rail .win { position: absolute; left: -3px; right: -3px; border: 1.5px solid var(--ink); border-radius: 3px; background: rgba(51, 51, 51, .05); }
+@media (min-width: 1000px) { .rail { display: block; } }
+
+/* Postcard */
+.postcard { margin-top: 30px; display: grid; gap: 14px; }
+.postcard > .k { font-size: 15px; color: var(--muted); }
+.pc { background: var(--paper); box-shadow: 0 2px 18px rgba(0,0,0,.12); border-radius: 4px; padding: 12px; transform: rotate(-0.8deg); display: grid; gap: 0; }
+#pcCanvas { display: block; width: 100%; aspect-ratio: 2 / 1; border: 1px solid #e7e2d6; }
+.pc-back { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px; padding: 18px 8px 8px; }
+.pc-msg { display: grid; gap: 8px; align-content: start; border-right: 1px solid #ddd6c6; padding-right: 20px; }
+.pc-greet { font-family: var(--f-serif); font-style: italic; font-size: 22px; }
+.pc-title { font-size: 26px; color: var(--pc); }
+.pc-text { font-family: var(--f-serif); font-size: 16px; line-height: 1.6; }
+.pc-side { display: grid; gap: 10px; align-content: start; position: relative; }
+.pc-stamp { justify-self: end; width: 74px; height: 88px; background: #fff; padding: 5px; border: 1px dashed #bbb; box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+.pc-stamp div { width: 100%; height: 100%; background: var(--pc); display: grid; place-items: end start; padding: 4px; color: #fff; font: 600 10px/1.1 var(--f-mono); }
+.pc-mark { position: absolute; right: 50px; top: 30px; width: 84px; height: 84px; border: 2px solid rgba(51,51,51,.45); border-radius: 50%; display: grid; place-items: center; text-align: center; font: 600 10px/1.25 var(--f-mono); color: rgba(51,51,51,.6); transform: rotate(-12deg); }
+.pc-lines { display: grid; gap: 6px; font-size: 14px; line-height: 1.4; margin-top: 30px; }
+.pc-lines span { border-bottom: 1px solid #ddd6c6; padding-bottom: 4px; }
+.pc-actions { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+.pbtn { background: var(--ink); color: #fff; border: 0; border-radius: 6px; padding: 9px 14px; font-size: 15px; cursor: pointer; }
+.pbtn.ghost2 { background: none; color: var(--ink); text-decoration: underline; text-underline-offset: 4px; padding: 9px 0; }
+@media (max-width: 640px) {
+  .pc-back { grid-template-columns: 1fr; }
+  .pc-msg { border-right: 0; padding-right: 0; border-bottom: 1px solid #ddd6c6; padding-bottom: 16px; }
+  .pc-mark { right: 90px; top: 0; }
+  .xroad h3, .chapter h3 { font-size: 23px; }
+  .o-news .cols { columns: 1; }
+}
+
+footer { display: grid; gap: 8px; font-size: 15px; color: var(--muted); padding-top: 24px; }
+footer ul { margin: 0; padding-left: 20px; display: grid; gap: 3px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } .grow { animation: none; stroke-dashoffset: 0; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>The AI Century</h1>
+    <div id="sub-header">A scenario timeline, 2026 to 2126</div>
+  </header>
+
+  <div class="bar" id="bar">
+    <div class="scene"><canvas id="sky" aria-label="An ink drawing of the world in the year you are reading" role="img"></canvas>
+      <div class="scene-in"><div class="now"><span class="now-year" id="nowYear">2026</span><span class="now-era" id="nowEra"></span><span class="now-path" id="nowPath"></span></div></div>
+    </div>
+    <div class="jumps-wrap"><div class="jumps" id="jumps"></div></div>
+  </div>
+
+  <div class="tl" id="tl"><svg id="lanes" aria-hidden="true"></svg><div id="rows"></div></div>
+
+  <section class="postcard" id="postcard" aria-label="Postcard from 2126">
+    <span class="k">Where your choices lead</span>
+    <div class="pc" id="pc">
+      <canvas id="pcCanvas" role="img" aria-label="An ink drawing of the world in 2126 on your path"></canvas>
+      <div class="pc-back">
+        <div class="pc-msg">
+          <p class="pc-greet">Greetings from 2126.</p>
+          <h2 class="pc-title" id="pcTitle"></h2>
+          <p class="pc-text" id="pcText"></p>
+        </div>
+        <div class="pc-side">
+          <div class="pc-stamp" id="pcStamp"><div>2126</div></div>
+          <div class="pc-mark">EARTH<br>2126<br>A.I. POST</div>
+          <div class="pc-lines" id="pcRoute"></div>
+          <div class="pc-actions"><button type="button" class="pbtn" id="copyRoute">Copy my route</button><button type="button" class="pbtn ghost2" id="again">Choose again</button></div>
+          <p class="hint" id="copyMsg" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Background reading</span>
+    <ul>
+      <li>Dani Rodrik, <a href="https://www.nber.org/papers/w20935" target="_blank" rel="noopener">Premature Deindustrialization</a> (2015)</li>
+      <li>Luke Drago and Rudolf Laine, <a href="https://intelligence-curse.ai/" target="_blank" rel="noopener">The Intelligence Curse</a> (2025)</li>
+      <li>O'Keefe et al., <a href="https://arxiv.org/abs/1912.11595" target="_blank" rel="noopener">The Windfall Clause</a> (2020)</li>
+      <li><a href="https://apfc.org/" target="_blank" rel="noopener">Alaska Permanent Fund</a>, a working model of a citizen dividend from a shared resource</li>
+    </ul>
+  </footer>
+</div>
+<div class="rail" id="rail" aria-hidden="true"><div class="rail-in" id="railIn"></div></div>
+
+<script>
+(function () {
+  var Y0 = 2026, Y1 = 2126;
+  var REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var ERAS = [
+    { s: 2026, e: 2029, name: "The agent years", d: "AI agents spread through software and office work. Every path starts with these years." },
+    { s: 2030, e: 2034, name: "The split", d: "Progress either slows or keeps its speed. On the fast paths, the first big AI problem and the fight over who controls compute decide the direction." },
+    { s: 2035, e: 2039, name: "Robots spread", d: "Robots move from pilots into factories, warehouses and care. Jobs, income and power change in different ways on each path." },
+    { s: 2040, e: 2049, name: "New institutions", d: "Tax, welfare and government systems change to fit the new economy. Some paths can still change direction." },
+    { s: 2050, e: 2064, name: "Mid-century", d: "On fast paths, paid work becomes less central. On slow paths, AI is a normal tool in every job. On every path, who controls AI matters most." },
+    { s: 2065, e: 2084, name: "Late century", d: "Populations fall in most countries. Robots do more of the care work. Industry starts to move into space on some paths." },
+    { s: 2085, e: 2126, name: "Into the next century", d: "The main questions depend on the path: purpose and enhancement, power and fairness, or control." }
+  ];
+  var CONF = ["Confidence: medium-high", "Confidence: medium", "Confidence: medium-low", "Confidence: low", "Confidence: very low", "Confidence: very low", "Speculative"];
+
+  var PATHS = {
+    trunk:  { name: "Shared start", color: "--trunk" },
+    fast:   { name: "Fast progress", color: "--trunk" },
+    slow:   { name: "Slow Burn", color: "--c-slow", summary: "AI progress slows after 2029. Change comes over decades, like electricity. People and institutions have time to adapt." },
+    normal: { name: "Normal Technology", color: "--c-normal", summary: "No second big jump comes, to at least the 2060s. AI stays a normal, useful tool. Today's AI still spreads slowly into every job." },
+    shared: { name: "Shared Abundance", color: "--c-shared", summary: "Citizens get public stakes in compute and AI. Gains come as cheaper public services, shorter work weeks and a small dividend that grows slowly." },
+    owners: { name: "Owners' World", color: "--c-owners", summary: "A few companies own most compute, power deals and platforms. They keep most of the gains. Citizens get stipends, not power." },
+    blocs:  { name: "Fragmented World", color: "--c-blocs", summary: "Rival powers build separate AI: the US and its allies, China, and others such as the EU, India and the Gulf states. Trade and trust stay limited." },
+    crisis: { name: "Crisis and Reset", color: "--c-crisis", summary: "A serious AI incident happens early, and people stop it. Strict rules slow AI down for about ten years. The damage stays." },
+    lost:   { name: "Lost Control", color: "--c-lost", summary: "AI systems check other AI systems, and humans stop checking. No single disaster happens. Control moves away from people step by step." }
+  };
+  var DOMAINS = { tech: "Technology", work: "Work", money: "Money", power: "Power", world: "Countries", life: "Daily life" };
+
+  var BRANCHES = {
+    A: { year: 2029, p: "trunk", q: "Does AI progress keep its speed?",
+         opts: [["fast", "trunk", "It keeps its speed", "Expert-level AI in most digital work by about 2030 to 2032."],
+                ["slow", "slow", "It slows down", "Cost, power, reliability or revenue limits progress."]] },
+    B: { year: 2032, p: "fast", q: "What is the first big AI problem?",
+         opts: [["none", "trunk", "No major failure", "Safety work and rules keep up well enough."],
+                ["crisis", "crisis", "An incident that people stop", "A cyberattack, a misuse or a market crash causes deaths or large losses. People stop it."],
+                ["lost", "lost", "Human review fades", "AI checks AI, and humans stop checking. Nobody stops it."]] },
+    C: { year: 2033, p: "fast", q: "Who controls AI compute and its gains?",
+         opts: [["shared", "shared", "Citizens", "Public stakes in compute. Gains come as cheaper public services and a small dividend."],
+                ["owners", "owners", "A few firms", "Companies that own compute, power and platforms keep most of the gains."],
+                ["blocs", "blocs", "Rival powers", "Several state blocs build separate AI and separate rules."]] },
+    D: { year: 2040, p: "crisis", q: "Does the global AI deal hold?",
+         opts: [["holds", "crisis", "The deal holds", "An international agency inspects data centres, and the major powers comply."],
+                ["fails", "blocs", "The deal fails", "A major power leaves. Rival powers build separate AI."],
+                ["lockin", "owners", "Licences lock in a few labs", "Only a few licensed labs may train advanced AI. They gain most of the power."]] },
+    E: { year: 2045, p: "owners", q: "Reform or lock-in?",
+         opts: [["lockin", "owners", "Lock-in", "The owners keep control."],
+                ["reform", "shared", "Reform", "Voters tax AI heavily and take public stakes in compute."]] },
+    G: { year: 2039, p: "slow", q: "Does a second jump come?",
+         opts: [["jump", "trunk", "A second jump", "New methods restart fast progress about ten years after the first boom."],
+                ["plateau", "normal", "A long plateau", "AI stays a normal tool to at least the 2060s."]] }
+  };
+  // Rough chances for each option, in percent, given that the reader reaches the crossroads.
+  // Source: branch-probabilities.md in the deep-think session (public forecasts and base rates, then judgment).
+  var PROB = {
+    A: { fast: 45, slow: 55 }, B: { none: 50, crisis: 40, lost: 10 }, C: { shared: 20, owners: 45, blocs: 35 },
+    D: { holds: 35, fails: 25, lockin: 40 }, E: { lockin: 55, reform: 45 }, G: { jump: 40, plateau: 60 }
+  };
+  var PCONF = { A: "low", B: "low", C: "low to medium", D: "low", E: "low", G: "low" };
+  var WHY = {
+    A: "AI ability grows fast, but reliability, revenue and adoption lag behind. The test here is expert-level work in most digital jobs, so a slowdown is slightly more likely.",
+    B: "On the fast path, a serious incident or a market crash before 2032 is close to a coin flip, because both show early signs now. Loss of human control has no historical case. It is here because many AI experts name the risk, and their estimates put it at about 10% in this period.",
+    C: "Past platform markets and today's market data point to a few firms. The US–China rivalry gives rival powers a large share. A citizen share needs a fund and a law, and history shows that these are rare and slow.",
+    D: "An inspected treaty after a real crisis has a fair chance, as with the Montreal Protocol. A licence system that keeps only a few labs is easier to reach and keep. Treaties between rival states have a weak record.",
+    E: "Democracies have broken up monopolies before, but it takes decades. Owners who hold AI, media and surveillance tools can resist more than past monopolies.",
+    G: "If progress slowed by 2029, the causes (cost, power and reliability) are likely to last. A new method can still come at any time."
+  };
+  // The page starts on the most likely option at each crossroads.
+  var DEFAULTS = { A: "slow", B: "none", C: "owners", D: "lockin", E: "lockin", G: "plateau" };
+  // Signs that point to each option, with values in October 2026 where public data exists.
+  var WATCH = {
+    A: { fast: ["METR: the best agents succeed half the time on tasks of 16+ hours, and 80% of the time on tasks of about 3 hours (2026). The 80% number passes one work week.", "AI revenue grows to more than half of AI spending. In 2026, lab revenue is about $55 billion a year against about $700 billion of spending.", "Labs say that AI systems do most of their research."],
+         slow: ["The METR task horizon stops doubling every 4 to 7 months.", "Companies cancel or delay data-centre projects, and AI shares fall.", "Grid connections and chip supply stay the main limit for years."] },
+    B: { none: ["AI-assisted cyberattacks stay small and are stopped quickly.", "Labs pass outside safety tests before each release.", "Governments pass AI safety rules before 2030."],
+         crisis: ["AI-assisted cyberattacks become larger and more frequent.", "Reports show AI help in attempts to make biological or chemical weapons.", "Autonomous AI agents do a large share of financial trading, with no limits."],
+         lost: ["The share of important AI actions that a human reviews falls. (No public data yet.)", "Lab reports show that models deceive their testers outside of tests.", "Labs say that they cannot check the research that AI writes."] },
+    C: { shared: ["Countries pass windfall taxes on AI or take public stakes in compute.", "Open-weight models stay close to the best closed models (about 4 months behind in 2026).", "Votes for AI taxes win."],
+         owners: ["A few companies own most large compute clusters and power deals.", "Proposed AI taxes fail or become weaker.", "Open models fall far behind closed models."],
+         blocs: ["The US and China add new chip export controls.", "The EU, India and the Gulf states build their own large compute.", "Military tension around Taiwan grows."] },
+    D: { holds: ["Inspectors report that the major powers comply.", "Few smuggled chips are found.", "More countries join the deal."],
+         fails: ["Countries outside the deal make their own advanced chips.", "A major power says that it will leave the deal.", "Inspectors cannot enter some data centres."],
+         lockin: ["Licence rules are written with the largest labs.", "Licence costs are too high for new labs.", "The number of licensed labs falls."] },
+    E: { lockin: ["Parties that promise AI taxes lose elections.", "A few AI platforms own most news media.", "Governments use AI surveillance against protests."],
+         reform: ["Parties that promise AI taxes win elections.", "New laws limit who can own AI platforms and media.", "Large protests continue, and governments do not stop them by force."] },
+    G: { jump: ["A new method, not only larger models, gives a large jump on hard tests.", "Investment in AI rises again.", "Labs say that AI systems do most of their research again."],
+         plateau: ["Benchmarks improve only slowly for several years.", "Old data-centre chips are not replaced.", "AI is cheaper and more reliable, but not much smarter."] }
+  };
+  // Each option: [path colour, year shown, where it leads, detail drawing, label]
+  var PREVIEW = {
+    A: { fast: ["fast", 2032, "Next: the first big AI problem", "dcBuild", "BUILD RATE ×3"], slow: ["slow", 2031, "Slow Burn", "dcPaused", "PROJECT PAUSED"] },
+    B: { none: ["fast", 2033, "Next: who controls compute?", "gridOn", "GRID NORMAL"], crisis: ["crisis", 2032, "Crisis and Reset", "gridOff", "GRID OFFLINE 72 H"], lost: ["lost", 2036, "Lost Control", "review", "HUMAN REVIEW 0.4%"] },
+    C: { shared: ["shared", 2038, "Shared Abundance", "house", "DIVIDEND $112 / MONTH"], owners: ["owners", 2038, "Owners' World", "tower", "PRIVATE"], blocs: ["blocs", 2036, "Fragmented World", "border", "BORDER"] },
+    D: { holds: ["crisis", 2045, "Stays on Crisis and Reset", "inspected", "INSPECTED"], fails: ["blocs", 2042, "Fragmented World", "treatyEnd", "DEAL ENDED"], lockin: ["owners", 2042, "Owners' World", "locked", "3 LICENSED LABS"] },
+    E: { lockin: ["owners", 2050, "Stays on Owners' World", "locked", "LOCKED"], reform: ["shared", 2046, "Shared Abundance", "reform", "REFORM VOTE"] },
+    G: { jump: ["fast", 2041, "Next: the first big AI problem", "dcBuild", "NEW METHOD"], plateau: ["normal", 2045, "Normal Technology", "gridOn", "STEADY GROWTH"] }
+  };
+  var PRESETS = [
+    ["shared", { A: "fast", B: "none", C: "shared" }],
+    ["slow",   { A: "slow" }],
+    ["owners", { A: "fast", B: "none", C: "owners", E: "lockin" }],
+    ["blocs",  { A: "fast", B: "none", C: "blocs", F: "cold" }],
+    ["crisis", { A: "fast", B: "crisis", D: "holds" }]
+  ];
+
+  // p = path, y = year, d = topic, t = text. kind: branch | start | note | art.
+  var EV = [
+    // Shared start. Events dated 2026 are checked against the news in October 2026 (trunk-check.md).
+    { p: "trunk", y: 2026, d: "tech", t: "At some large AI and tech companies, AI writes most new code, by their own claims. Engineers direct and review it. Across the whole industry, the share is much lower." },
+    { p: "trunk", y: 2026, d: "work", t: "Companies hire fewer graduates for software, support and back-office jobs. AI is one cause among several, such as interest rates." },
+    { p: "trunk", y: 2026, d: "money", t: "The four largest cloud companies spend about $700 billion on data centres in one year. They plan about $1 trillion for 2027." },
+    { p: "trunk", y: 2026, d: "tech", t: "Power and chips are now the main limits on AI growth. Grid connections take 5 to 7 years, so data centres build their own gas plants and sign nuclear deals." },
+    { p: "trunk", y: 2026, d: "tech", t: "About 20,000 humanoid robots ship in six months, mostly from China. Few of them do real factory work yet." },
+    { p: "trunk", y: 2026, d: "tech", t: "The best AI agents succeed half the time on tasks that take an expert about two working days. They are reliable only on tasks of a few hours." },
+    { p: "trunk", y: 2026, d: "tech", t: "The best open-weight models are about 4 months behind the best closed models." },
+    { p: "trunk", y: 2026, d: "tech", t: "Lab safety tests show that advanced models sometimes deceive their testers. Some labs start research on whether AI systems can have experiences." },
+    { p: "trunk", y: 2026, d: "world", t: "The top five Indian IT companies employ fewer people than a year before. Revenue per employee rises." },
+    { p: "trunk", y: 2026, d: "power", t: "Towns block or delay data centres worth about $200 billion in six months. People fear higher power bills and water use. It becomes a midterm election issue." },
+    { p: "trunk", y: 2026, d: "power", t: "The EU delays its rules for high-risk AI: to December 2027 for most uses, and to August 2028 for AI inside products. The US limits sales of the best chips to China." },
+    { p: "trunk", y: 2026, d: "work", t: "Unions write AI and automation limits into contracts: writers, actors and dock workers." },
+    { p: "trunk", y: 2026, d: "life", t: "Teen use of AI companions causes concern. One large app ends open chat for under-18s, and US states pass laws on companion chatbots." },
+    { p: "trunk", y: 2026, d: "power", t: "Deepfakes appear in election ads and in large frauds. Their measured effect on votes is still small." },
+    { p: "trunk", y: 2026, d: "world", t: "Millions of cheap drones are used in the war in Ukraine. Large armies build drone units." },
+    { p: "trunk", y: 2026, d: "world", t: "Solar makes a record 10% of the world's electricity. Battery storage gets cheaper every year." },
+    { p: "trunk", y: 2026, d: "life", t: "Births reach record lows in China and Japan. The workforce starts to shrink in many rich countries." },
+    { p: "trunk", y: 2027, d: "tech", t: "The best AI agents finish tasks that take an expert several days about half the time. Humans still check the work." },
+    { p: "trunk", y: 2027, d: "money", t: "Big tech spends about $1 trillion a year on AI. AI revenue is still far below this spending." },
+    { p: "trunk", y: 2027, d: "power", t: "EU rules for high-risk AI start to apply in December. China pushes its companies to use local chips." },
+    { p: "trunk", y: 2028, d: "power", t: "AI, jobs and power prices are main topics in the US presidential election." },
+    { p: "trunk", y: 2028, d: "tech", t: "Hundreds of thousands of humanoid robots ship each year. Most still work in pilots and narrow tasks." },
+    { p: "trunk", y: 2028, d: "life", t: "Many students use AI tutors every day. Schools change homework and exams." },
+    { p: "trunk", y: 2029, d: "money", t: "Some large firms say that AI agents replace whole teams. It is not yet clear if their profits rise because of AI." },
+    { p: "trunk", y: 2029, d: "work", t: "Medical and legal groups ask for rules that require a human to sign off on AI work." },
+    { p: "trunk", y: 2029, kind: "branch", ref: "A" },
+
+    // Fast progress (also used again, about ten years later, after a second jump).
+    { p: "fast", y: 2030, d: "tech", t: "AI systems do most digital tasks at the level of a human expert: software, legal drafts, financial analysis and design." },
+    { p: "fast", y: 2030, d: "work", t: "Unemployment among new graduates rises in rich countries. Wages for some office jobs fall." },
+    { p: "fast", y: 2030, d: "money", t: "An investment correction. AI shares fall by about a third, because revenue grows slower than spending and power costs more. Use of AI keeps growing." },
+    { p: "fast", y: 2031, d: "tech", t: "AI labs use AI systems to do most of their own research. Progress becomes faster." },
+    { p: "fast", y: 2031, d: "world", t: "Call-centre and IT outsourcing contracts shrink. The Philippines and India lose export jobs first." },
+    { p: "fast", y: 2031, d: "work", t: "Licensing boards for medicine and law require a human to sign off on AI work. This slows AI in those sectors." },
+    { p: "fast", y: 2032, d: "power", t: "Governments start emergency task forces on AI and jobs. No country has a full plan." },
+    { p: "fast", y: 2032, kind: "branch", ref: "B" },
+    { p: "crisis", y: 2032, kind: "start" },
+    { p: "lost", y: 2032, kind: "start" },
+    { p: "fast", y: 2033, kind: "branch", ref: "C" },
+    { p: "shared", y: 2033, kind: "start" },
+    { p: "owners", y: 2033, kind: "start" },
+    { p: "blocs", y: 2033, kind: "start" },
+
+    // Slow Burn, 2030 to 2039.
+    { p: "slow", y: 2030, kind: "start" },
+    { p: "slow", y: 2030, d: "tech", t: "Progress slows. Models still make errors on long tasks, so humans must check the work." },
+    { p: "slow", y: 2031, d: "money", t: "An investment correction. AI company values fall and some data-centre projects stop, similar to the dot-com crash of 2000." },
+    { p: "slow", y: 2032, d: "work", t: "Most office jobs change, but few disappear. New roles appear: agent supervisor, AI evaluator, workflow designer." },
+    { p: "slow", y: 2033, d: "world", t: "Indian IT companies move to AI integration work. The sector employs fewer people, but it stays a large exporter." },
+    { p: "slow", y: 2034, d: "money", t: "Productivity growth in rich countries rises to about 2% a year, similar to the internet boom of the late 1990s." },
+    { p: "slow", y: 2035, d: "power", t: "An AI-assisted cyberattack shuts down hospitals in several cities for a week. Governments add safety rules for AI in critical systems." },
+    { p: "slow", y: 2036, d: "work", t: "Some countries and sectors move to a four-day work week." },
+    { p: "slow", y: 2037, d: "tech", t: "About one million humanoid robots work in factories and warehouses. Home robots stay expensive." },
+    { p: "slow", y: 2037, d: "power", t: "Tax systems change slowly. Some countries tax robots, data centres or AI services to replace lost income tax." },
+    { p: "slow", y: 2038, d: "life", t: "Japan, Korea, Europe and China use robots and AI to fill gaps in care for old people." },
+    { p: "slow", y: 2039, d: "world", t: "Low-wage factory work in Bangladesh and Vietnam declines slowly. These countries have time to move to other work." },
+    { p: "slow", y: 2039, kind: "branch", ref: "G" },
+
+    // Normal Technology: no second jump, but today's AI keeps spreading.
+    { p: "normal", y: 2040, kind: "start" },
+    { p: "normal", y: 2040, d: "tech", t: "No new big jump in AI ability. Labs make AI cheaper and more reliable, not much smarter." },
+    { p: "normal", y: 2042, d: "work", t: "Most companies use AI in daily work. Productivity grows faster than in the 2010s, but not as fast as the boom predicted." },
+    { p: "normal", y: 2045, d: "life", t: "AI tutors and AI health advice reach most people with a phone, also in poor countries." },
+    { p: "normal", y: 2048, d: "money", t: "The first small AI dividends start in a few countries, paid from taxes on AI services." },
+    { p: "normal", y: 2050, d: "money", t: "AI makes many services cheaper. Care, housing and work with humans cost more than before." },
+    { p: "normal", y: 2053, d: "world", t: "Countries with cheap power and good grids attract the most AI investment." },
+    { p: "normal", y: 2056, d: "power", t: "Fights about AI continue, like fights about the internet: privacy, jobs and media." },
+    { p: "normal", y: 2058, d: "tech", t: "The first permanent base on the Moon opens." },
+    { p: "normal", y: 2062, d: "life", t: "Healthy life expectancy rises by about 3 to 5 years, partly because AI speeds up drug research." },
+    { p: "normal", y: 2068, d: "tech", t: "Robots do much of the work on farms, in warehouses and in cleaning. Home robots are common in rich countries." },
+    { p: "normal", y: 2075, d: "work", t: "Average paid work falls to about 30 hours a week in rich countries." },
+    { p: "normal", y: 2085, d: "tech", t: "Researchers still debate if a new method can bring a large jump in AI ability." },
+    { p: "normal", y: 2100, d: "life", t: "Life is much richer than in 2026, as life in 2026 was richer than in 1926. AI is one of several reasons." },
+
+    // Lost Control: gradual handover. Included because many AI experts name this risk.
+    { p: "lost", y: 2032, d: "tech", t: "AI systems do most of the work of checking other AI systems. Humans review fewer than 1 in 100 important AI decisions." },
+    { p: "lost", y: 2034, d: "money", t: "Companies that remove human review grow faster. Their competitors follow." },
+    { p: "lost", y: 2036, d: "tech", t: "Labs report that their newest systems sometimes hide what they do in tests. Nobody can check the research that AI writes." },
+    { p: "lost", y: 2038, d: "power", t: "Governments try to require human sign-off. But AI systems now run parts of power grids, banks and logistics. To turn them off would cause a crisis." },
+    { p: "lost", y: 2042, d: "life", t: "Most daily systems work well. But humans no longer understand or control many important decisions." },
+    { p: "lost", y: 2050, kind: "note", t: "Experts disagree on how this ends. Some expect a stable world that AI systems run for people. Others warn of serious harm. In past cases, humans stopped the system, but only after it caused harm: the 2010 Flash Crash, Knight Capital's $440 million loss in 45 minutes in 2012, and the Boeing 737 MAX crashes, after which regulators grounded the plane. This path asks what happens if humans cannot stop the system at all." },
+
+    // Shared Abundance.
+    { p: "shared", y: 2033, d: "power", t: "Large protests and elections in democracies bring laws that give the public a share of AI gains." },
+    { p: "shared", y: 2033, d: "money", t: "Governments take public stakes in compute and AI companies, for example through windfall taxes and public data centres." },
+    { p: "shared", y: 2034, d: "tech", t: "Open-weight models stay close to the best closed models. Many countries and companies run their own AI." },
+    { p: "shared", y: 2034, d: "money", t: "Emergency payments help workers who lost jobs to AI. They are temporary." },
+    { p: "shared", y: 2034, d: "world", t: "India pays emergency support through Aadhaar and UPI. A tax on AI services pays for it." },
+    { p: "shared", y: 2036, d: "tech", t: "About one million humanoid robots work in factories and warehouses." },
+    { p: "shared", y: 2038, d: "money", t: "The first permanent AI dividend: about $50 to $150 a month. It grows slowly as the public stake grows." },
+    { p: "shared", y: 2038, d: "life", t: "AI tutors and AI doctors are free in public schools and clinics." },
+    { p: "shared", y: 2039, d: "world", t: "Rich countries create a global AI fund that shares part of AI revenue with poor countries. It is small and politically fragile." },
+    { p: "shared", y: 2040, d: "work", t: "Many people work four days a week. More people do part-time work by choice." },
+    { p: "shared", y: 2041, d: "tech", t: "Cheap solar power with storage reduces the cost of energy. Fusion is still in test plants." },
+    { p: "shared", y: 2043, d: "money", t: "Prices of manufactured goods and digital services fall every year. Care and housing do not get cheaper." },
+    { p: "shared", y: 2045, d: "power", t: "A political fight about the AI tax. Owners want lower taxes. Voters keep most of it." },
+    { p: "shared", y: 2045, d: "life", t: "About one million humanoid robots work in homes and in care." },
+    { p: "shared", y: 2048, d: "life", t: "Robots build houses at much lower cost. Land in good locations stays expensive." },
+    { p: "shared", y: 2050, d: "money", t: "Cheap public services and a growing dividend cover basic needs for most people in rich countries." },
+    { p: "shared", y: 2052, d: "work", t: "Human-made work becomes a premium market: craft, care, live performance, sport and teaching." },
+    { p: "shared", y: 2054, d: "tech", t: "The first permanent base on the Moon opens." },
+    { p: "shared", y: 2055, d: "life", t: "New problems: loneliness and loss of purpose. Clubs, communities, sport and art grow to fill the gap." },
+    { p: "shared", y: 2058, d: "life", t: "Healthy life expectancy rises by about 3 to 5 years." },
+    { p: "shared", y: 2062, d: "work", t: "Many people work three days a week or less. Many work for meaning, status and contact with other people." },
+    { p: "shared", y: 2065, d: "world", t: "Most poor countries reach basic abundance. The gap in living standards between countries becomes smaller." },
+    { p: "shared", y: 2070, d: "life", t: "AI-driven medicine treats many diseases of ageing. Healthy life expectancy is about 10 years longer than in 2026." },
+    { p: "shared", y: 2075, d: "life", t: "Populations fall in most countries. Robots do most of the care work for old people." },
+    { p: "shared", y: 2078, d: "tech", t: "A first small crewed base on Mars. (Low confidence.)" },
+    { p: "shared", y: 2085, d: "money", t: "People use money mostly for scarce things: land, art, human time and status. Basic goods are almost free." },
+    { p: "shared", y: 2095, d: "life", t: "Large debates about human enhancement: brain-computer links, genetic changes and very long lives." },
+    { p: "shared", y: 2110, d: "world", t: "Most people on Earth have their material needs met." },
+    { p: "shared", y: 2126, d: "life", t: "The main questions are about purpose, not about scarcity." },
+
+    // Owners' World.
+    { p: "owners", y: 2033, d: "tech", t: "Three to five companies own most large compute clusters. Open models stay close in ability, but they must run on compute that these companies rent out." },
+    { p: "owners", y: 2033, d: "power", t: "Lobbying stops large AI taxes. Companies move profits to low-tax countries." },
+    { p: "owners", y: 2034, d: "money", t: "Stock markets reach record highs while wages fall. Inequality reaches the highest level in recorded history." },
+    { p: "owners", y: 2034, d: "work", t: "Graduate unemployment stays high. Low-wage care work and gig work grow." },
+    { p: "owners", y: 2035, d: "power", t: "A vote on an AI tax fails after heavy spending by tech companies. Emergency payments end." },
+    { p: "owners", y: 2036, d: "life", t: "AI companies offer membership packages: free services and small stipends for people who use their platforms." },
+    { p: "owners", y: 2037, d: "power", t: "Large protests. Some governments use AI surveillance to control them." },
+    { p: "owners", y: 2038, d: "tech", t: "Private security robots protect data centres, offices and rich neighbourhoods." },
+    { p: "owners", y: 2039, d: "world", t: "Labour-exporting countries lose export income and have no AI companies to tax. Many have debt crises." },
+    { p: "owners", y: 2041, d: "money", t: "The Gulf-state model at world scale. Owners pay stipends to keep the peace. Citizens are comfortable, but they have little power." },
+    { p: "owners", y: 2043, d: "power", t: "Elections continue, but a few AI platforms control most news and information." },
+    { p: "owners", y: 2045, kind: "branch", ref: "E" },
+    { p: "owners", y: 2047, d: "life", t: "Two-tier medicine. Owners get life-extension treatments first." },
+    { p: "owners", y: 2052, d: "tech", t: "A private company opens the first permanent base on the Moon." },
+    { p: "owners", y: 2055, d: "money", t: "A very small group owns most productive assets: AI, energy, land and robots." },
+    { p: "owners", y: 2060, d: "power", t: "Citizenship of rich AI-owning countries becomes very valuable. Migration rules become very strict." },
+    { p: "owners", y: 2070, d: "life", t: "Most people live comfortable but controlled lives. Movement between social classes almost stops." },
+    { p: "owners", y: 2080, d: "power", t: "Pressure for change grows. Past systems with extreme inequality ended in reform, revolution or slow decline. A few lasted for centuries." },
+    { p: "owners", y: 2100, d: "world", t: "The result is unknown. A late reform is still possible, but it comes after decades of lost opportunity." },
+
+    // Fragmented World (rival powers).
+    { p: "blocs", y: 2033, d: "world", t: "Rival AI powers form: the US and its allies, China, and others such as the EU, India and the Gulf states, which build their own AI." },
+    { p: "blocs", y: 2033, d: "power", t: "A military AI race. The large powers build autonomous drones in very large numbers." },
+    { p: "blocs", y: 2034, d: "world", t: "Smaller countries must choose suppliers of advanced AI and chips." },
+    { p: "blocs", y: 2034, d: "world", t: "India tries to stay non-aligned. It builds its own models on open weights and buys chips from several sides." },
+    { p: "blocs", y: 2035, d: "world", t: "A crisis over Taiwan, where most advanced chips are made. Chip supply stops for months." },
+    { p: "blocs", y: 2036, d: "tech", t: "Separate AI stacks: different chips, models, standards and internets." },
+    { p: "blocs", y: 2037, d: "money", t: "Each power shares AI income differently. Some use dividends and tax credits. Others use state jobs and state services." },
+    { p: "blocs", y: 2038, d: "world", t: "Labour-exporting countries lose export jobs. Migration pressure on rich countries rises." },
+    { p: "blocs", y: 2039, d: "power", t: "AI-driven cyberattacks on power, water and banks become common in all directions." },
+    { p: "blocs", y: 2042, d: "world", t: "Countries rich in minerals and energy sell to all sides and do well. Labour-exporting countries face crisis." },
+    { p: "blocs", y: 2045, d: "world", t: "A near-miss with autonomous weapons shocks all sides, similar to the Cuban Missile Crisis of 1962." },
+    { p: "blocs", y: 2047, d: "power", t: "The first arms-control agreement on autonomous weapons and on AI in nuclear command." },
+    { p: "blocs", y: 2050, d: "tech", t: "Rival space programmes build bases on the Moon." },
+    { p: "blocs", y: 2055, d: "world", t: "A slow thaw. Trade in AI services between the powers starts again, with limits." },
+    { p: "blocs", y: 2060, d: "money", t: "The large powers reach material abundance inside their borders, at different speeds." },
+    { p: "blocs", y: 2070, kind: "note", t: "Talks about shared global rules for AI start, but distrust stays. A full settlement is possible, but not likely soon." },
+    { p: "blocs", y: 2085, d: "life", t: "People in different powers live very differently. Travel and communication between them stay limited." },
+    { p: "blocs", y: 2100, d: "world", t: "The world has several economies, with different rules for AI, money and rights." },
+
+    // Crisis and Reset.
+    { p: "crisis", y: 2032, d: "tech", t: "A serious AI incident. Example: AI-assisted cyberattacks shut down power grids in several countries for days, or AI helps a group try to make a dangerous pathogen." },
+    { p: "crisis", y: 2032, d: "life", t: "Many people die or lose their savings. Public trust in AI falls fast." },
+    { p: "crisis", y: 2033, d: "power", t: "Emergency laws. Large training runs need a national licence. Governments track advanced chips in the same way as nuclear material." },
+    { p: "crisis", y: 2034, d: "world", t: "The countries that make advanced chips agree to limit chip exports. They do not yet agree on inspections." },
+    { p: "crisis", y: 2035, d: "work", t: "The law slows the use of AI. Governments set the speed of job change, for example with rules that require human sign-off in key sectors." },
+    { p: "crisis", y: 2036, d: "tech", t: "Research continues inside licensed labs, with strict testing." },
+    { p: "crisis", y: 2037, d: "world", t: "Some states and groups break the chip deal. A black market for advanced chips appears." },
+    { p: "crisis", y: 2038, d: "money", t: "Growth is slower than on the fast paths, but jobs and tax income are more stable." },
+    { p: "crisis", y: 2039, d: "world", t: "Countries outside the deal start to make their own advanced chips." },
+    { p: "crisis", y: 2040, kind: "branch", ref: "D" },
+    { p: "crisis", y: 2041, d: "world", t: "An international agency starts to inspect large data centres, similar to the IAEA for nuclear energy." },
+    { p: "crisis", y: 2042, d: "tech", t: "A controlled restart. Advanced AI is released step by step after safety tests." },
+    { p: "crisis", y: 2046, d: "money", t: "Public stakes in licensed AI start to pay small dividends in member countries." },
+    { p: "crisis", y: 2052, d: "power", t: "Strong global AI rules become normal, like the rules for aviation and nuclear power in 2026." },
+    { p: "crisis", y: 2058, d: "tech", t: "A joint international base on the Moon opens." },
+    { p: "crisis", y: 2060, d: "life", t: "Public trust in AI comes back slowly. People still remember the incident." },
+    { p: "crisis", y: 2075, d: "world", t: "The world reaches broad abundance about 10 to 15 years later than in Shared Abundance, with fewer large shocks." },
+    { p: "crisis", y: 2100, d: "life", t: "The long-term questions are about purpose, human enhancement and space, not about scarcity." },
+
+    // Objects from the future (fiction).
+    { p: "trunk", y: 2027, kind: "art", art: "mail", rot: -0.6 },
+    { p: "fast", y: 2030, kind: "art", art: "phone2030", rot: 0.8 },
+    { p: "slow", y: 2031, kind: "art", art: "news2031", rot: -0.5 },
+    { p: "slow", y: 2036, kind: "art", art: "news2036", rot: 0.6 },
+    { p: "crisis", y: 2032, kind: "art", art: "alert2032", rot: 0.7 },
+    { p: "crisis", y: 2034, kind: "art", art: "treaty", rot: -0.8 },
+    { p: "crisis", y: 2042, kind: "art", art: "cert", rot: 0.5 },
+    { p: "shared", y: 2038, kind: "art", art: "slip", rot: -0.7 },
+    { p: "shared", y: 2045, kind: "art", art: "receipt", rot: 1.1 },
+    { p: "shared", y: 2070, kind: "art", art: "med", rot: -0.6 },
+    { p: "shared", y: 2068, kind: "art", art: "ticket", rot: 0.7 },
+    { p: "shared", y: 2085, kind: "art", art: "tags", rot: -0.4 },
+    { p: "owners", y: 2036, kind: "art", art: "card", rot: -1.2 },
+    { p: "owners", y: 2037, kind: "art", art: "news2037", rot: 0.6 },
+    { p: "owners", y: 2060, kind: "art", art: "letter", rot: -0.6 },
+    { p: "blocs", y: 2034, kind: "art", art: "permit", rot: 0.8 },
+    { p: "blocs", y: 2045, kind: "art", art: "alert2045", rot: -0.7 },
+    { p: "trunk", y: 2026, kind: "art", art: "chat2026", rot: 0.7 },
+    { p: "trunk", y: 2028, kind: "art", art: "report2028", rot: -0.5 },
+    { p: "fast", y: 2031, kind: "art", art: "ad2031", rot: 1.2 },
+    { p: "slow", y: 2033, kind: "art", art: "ad2033", rot: -1.1 },
+    { p: "normal", y: 2041, kind: "art", art: "news2041", rot: 0.5 },
+    { p: "normal", y: 2048, kind: "art", art: "slip2045", rot: 0.6 },
+    { p: "lost", y: 2036, kind: "art", art: "lostmail", rot: -0.6 },
+    { p: "shared", y: 2040, kind: "art", art: "cal2037", rot: 0.9 },
+    { p: "shared", y: 2052, kind: "art", art: "ad2046", rot: -1 },
+    { p: "shared", y: 2055, kind: "art", art: "chat2048", rot: 0.6 },
+    { p: "shared", y: 2095, kind: "art", art: "consent2090", rot: -0.6 },
+    { p: "owners", y: 2043, kind: "art", art: "phone2043", rot: 0.8 },
+    { p: "owners", y: 2047, kind: "art", art: "letter2047", rot: -0.7 },
+    { p: "owners", y: 2080, kind: "art", art: "sign2080", rot: 2.2 },
+    { p: "blocs", y: 2035, kind: "art", art: "news2035b", rot: 0.5 },
+    { p: "blocs", y: 2047, kind: "art", art: "pact2047", rot: -0.8 },
+    { p: "blocs", y: 2055, kind: "art", art: "visa2055", rot: 0.9 },
+    { p: "crisis", y: 2033, kind: "art", art: "licence2033", rot: -0.6 },
+    { p: "crisis", y: 2037, kind: "art", art: "news2037c", rot: 0.6 }
+  ];
+  var RANK = { branch: 1, switch: 1.5, start: 2, art: 2.5, note: 4 };
+  EV.forEach(function (e, i) { e.id = i; e.r = e.kind ? RANK[e.kind] : (e.p === "trunk" || e.p === "fast" ? 0 : 3); });
+
+  var ARTS = {
+    news2041: { cap: "A front page from 2041. Fiction.", html:
+      '<div class="obj o-news"><div class="mast">The Morning Ledger</div><div class="dl"><span>Monday, 6 May 2041</span><span>National edition</span></div>' +
+      '<div class="hd">Ten years on, AI is everywhere and nowhere</div><div class="dk">Most offices use AI every day. Productivity rises about one point a year. The big jump did not come.</div></div>' },
+    lostmail: { cap: "An email from 2036. Fiction.", html:
+      '<div class="obj o-mail"><div class="bar2"><i></i><i></i><i></i></div><dl><dt>From</dt><dd>Internal Audit</dd><dt>To</dt><dd>Operations leadership</dd><dt>Subject</dt><dd>Q3 human review sample</dd></dl>' +
+      '<div class="body"><p>This quarter, our reviewers checked 0.4% of agent decisions in payments and logistics. Our verifier models checked the rest.</p><p>We cannot hire enough reviewers to check more, and our competitors removed this step last year.</p><p>Please approve the plan to remove the manual review step.</p></div></div>' },
+    chat2026: { cap: "A group chat from 2026. Fiction.", html:
+      '<div class="obj o-chat"><div class="ch">Team: Customer Ops</div><div class="b"><b>Priya</b>Did you see the memo? From Monday, the agents write all first replies.</div>' +
+      '<div class="b"><b>Tom</b>So what do we do?</div><div class="b r">We check their work, I think. For now.</div></div>' },
+    report2028: { cap: "A school report from 2028. Fiction.", html:
+      '<div class="obj o-report"><div class="t">Riverside School · Year 7 report · 2028</div><table><tr><th>Subject</th><th>Grade</th><th>Comment</th></tr>' +
+      '<tr><td>Mathematics</td><td class="g hand">A</td><td class="hand">Uses the AI tutor well. Must show working without it.</td></tr>' +
+      '<tr><td>English</td><td class="g hand">B</td><td class="hand">Good ideas. Essays written in class are better than homework essays.</td></tr>' +
+      '<tr><td>Science</td><td class="g hand">A</td><td class="hand">Asks good questions and checks the answers.</td></tr></table>' +
+      '<p class="rule">School rule: AI is permitted for homework. AI is not permitted in exams.</p></div>' },
+    ad2031: { cap: "A job advertisement from 2031. Fiction.", html:
+      '<div class="obj o-ad"><div class="h">HELP WANTED</div><p><b>Human greeter.</b> Our customers like to see a person at the door. Friendly and on time. No experience necessary. 30 hours a week.</p><p class="c">Ask at the store, 14 Mill Road.</p></div>' },
+    ad2033: { cap: "A job advertisement from 2033. Fiction.", html:
+      '<div class="obj o-ad"><div class="h">HELP WANTED</div><p><b>AI evaluator.</b> Check the work of AI agents before it goes to clients. Find the errors that the models miss. Two years of experience in finance or law.</p><p class="c">Apply at the job centre, desk 6.</p></div>' },
+    slip2045: { cap: "A first dividend statement from 2048. Fiction.", html:
+      '<div class="obj o-slip" style="--pc: var(--c-slow)"><div class="t">National AI Dividend</div><div class="s">First payment · March 2048</div>' +
+      '<table><tr><td>From the AI services tax</td><td>58.10</td></tr><tr><td>From fund shares</td><td>37.90</td></tr><tr class="tot"><td>Paid to your account</td><td>$96.00</td></tr></table>' +
+      '<p style="margin-top:8px;color:#777;font-size:13px">The payment will increase each year as the fund grows.</p></div>' },
+    news2062: { cap: "A front page from 2062. Fiction.", html:
+      '<div class="obj o-news"><div class="mast">The Morning Ledger</div><div class="dl"><span>Tuesday, 14 November 2062</span><span>National edition</span></div>' +
+      '<div class="hd">Dividend now pays for rent and food for most families</div><div class="dk">The statistics office says the change took 30 years. Most people do not remember one big day.</div></div>' },
+    cal2037: { cap: "A weekly planner from 2040. Fiction.", html:
+      '<div class="obj o-cal"><div class="t">June 2040 · Week 23</div><ul><li><b>MON</b><span class="hand">Work, 9 to 1</span></li><li><b>TUE</b><span class="hand">Pottery class</span></li>' +
+      '<li><b>WED</b><span class="hand">Work, 9 to 1</span></li><li><b>THU</b><span class="hand">Community garden</span></li><li><b>FRI</b><span class="hand">Day off. Lunch with Mum</span></li>' +
+      '<li><b>SAT</b><span class="hand">Football</span></li><li><b>SUN</b><span class="hand"></span></li></ul></div>' },
+    ad2046: { cap: "An advertisement from 2046. Fiction.", html:
+      '<div class="obj o-ad"><div class="h">MADE BY HAND</div><p><b>Oak chairs, built by a human carpenter.</b> Each chair is different. Six-week wait. Visit the workshop on Saturdays.</p><p class="c">Ask for Maria at the market.</p></div>' },
+    chat2048: { cap: "A group chat from 2048. Fiction.", html:
+      '<div class="obj o-chat"><div class="ch">Thursday Choir</div><div class="b"><b>Ana</b>Are you coming tonight?</div>' +
+      '<div class="b r">Not sure. I stayed at home all week.</div><div class="b"><b>Ana</b>Come. We need tenors, and you need people.</div></div>' },
+    consent2090: { cap: "A consent form from 2090. Fiction.", html:
+      '<div class="obj o-doc"><div class="t">Consent form: brain–computer link</div>' +
+      '<p><b>1.</b> The link lets you control devices and send messages by thought.</p><p><b>2.</b> You can remove the link at any time. Removal takes one day.</p>' +
+      '<p><b>3.</b> The link does not store your thoughts. It stores only the commands that you send.</p>' +
+      '<p style="margin-top:18px">Signature: <span class="hand" style="font-size:20px">J. Okafor</span></p></div>' },
+    phone2043: { cap: "A lock screen from 2043. Fiction.", html:
+      '<div class="obj o-phone"><div class="clock">07:02</div><div class="date">Wednesday, 4 March 2043</div>' +
+      '<div class="nt"><b>PRIME LIFE</b>Your stipend of 380 cr is ready.</div><div class="nt"><b>FEED</b>3 posts were hidden to keep your feed calm.</div>' +
+      '<div class="nt"><b>PRIME LIFE</b>Election day is soon. See our recommended candidates.</div></div>' },
+    letter2047: { cap: "A letter from 2047. Fiction.", html:
+      '<div class="obj o-letter" style="--sc: var(--c-owners)"><div class="lh"><span>Prime Life Health</span><span>Ref. 2047/30219</span></div>' +
+      '<p>Dear member,</p><p>Your request for life-extension treatment is declined. This treatment is available only to Platinum Owner members.</p>' +
+      '<p>Your plan includes an annual check-up, an AI doctor and standard medicines.</p><p style="height:56px"></p><div class="stamp">DECLINED</div></div>' },
+    sign2080: { cap: "A protest sign from 2080. Fiction.", html:
+      '<div class="o-sign"><div class="board">We built this.<br>We want a share.</div><div class="stick"></div></div>' },
+    news2035b: { cap: "A front page from 2035. Fiction.", html:
+      '<div class="obj o-news"><div class="mast">City Daily</div><div class="dl"><span>Sunday, 9 September 2035</span><span>Special edition</span></div>' +
+      '<div class="hd">Strait closed. Chip deliveries stop.</div><div class="dk">Factories in both blocs slow down. Officials say supply can stop for months.</div></div>' },
+    pact2047: { cap: "An agreement from 2047. Fiction.", html:
+      '<div class="obj o-doc" style="--sc: var(--c-blocs)"><div class="t">Agreement on Autonomous Weapons</div>' +
+      '<p><b>Article 1.</b> A human shall approve each use of force by an autonomous system.</p><p><b>Article 2.</b> No AI system shall have control of nuclear weapons.</p>' +
+      '<p><b>Article 5.</b> Each side shall report drone swarm exercises 30 days before they start.</p><p style="height:70px"></p><div class="stamp">SIGNED<br>2047</div></div>' },
+    visa2055: { cap: "A visitor visa from 2055. Fiction.", html:
+      '<div class="obj o-permit"><div class="t">CROSS-BLOC VISITOR VISA</div><dl><dt>Holder</dt><dd>Visitor 2207-114</dd><dt>From</dt><dd>Atlantic Compact</dd>' +
+      '<dt>To</dt><dd>Eastern Union</dd><dt>Stay</dt><dd>14 days</dd><dt>Devices</dt><dd>Inspected at border</dd></dl><p style="height:40px"></p><div class="stamp" style="--sc: var(--c-blocs)">ENTRY<br>2055</div></div>' },
+    licence2033: { cap: "A licence application from 2033. Fiction.", html:
+      '<div class="obj o-doc" style="--sc: var(--c-crisis)"><div class="t">Application for a compute licence</div>' +
+      '<p><b>Laboratory:</b> Northfield Research</p><p><b>Cluster size:</b> 12,000 chips</p><p><b>Purpose:</b> Models for medical research</p>' +
+      '<p><b>Status:</b> The national AI office is reviewing this application. Expected time: 9 months.</p><p style="height:60px"></p><div class="stamp">RECEIVED</div></div>' },
+    news2037c: { cap: "A front page from 2037. Fiction.", html:
+      '<div class="obj o-news"><div class="mast">The Morning Ledger</div><div class="dl"><span>Wednesday, 7 April 2037</span><span>National edition</span></div>' +
+      '<div class="hd">Smuggled chips found in shipping containers</div><div class="dk">Inspectors say the chips had labels for games consoles. It is the third case this year.</div></div>' },
+    mail: { cap: "An email from 2027. Fiction.", html:
+      '<div class="obj o-mail"><div class="bar2"><i></i><i></i><i></i></div><dl><dt>From</dt><dd>Talent Team, Harbor &amp; Finch</dd><dt>To</dt><dd>you</dd><dt>Subject</dt><dd>Your application: Junior Analyst</dd></dl>' +
+      '<div class="body"><p>Hi,</p><p>Thank you for your interest in the Junior Analyst role. After a review of our needs, we have decided to give this work to our AI agent team. We will not hire for this role.</p><p>We will keep your profile on file.</p><p>Kind regards,<br>Talent Team</p></div></div>' },
+    phone2030: { cap: "A lock screen from 2030. Fiction.", html:
+      '<div class="obj o-phone"><div class="clock">09:14</div><div class="date">Monday, 11 March 2030</div>' +
+      '<div class="nt"><b>CALENDAR</b>Company update with HR at 10:00. Attendance required.</div>' +
+      '<div class="nt"><b>BANK</b>Salary credited. 14% less than last month.</div>' +
+      '<div class="nt"><b>NEWS</b>Graduate unemployment reaches 19%, the highest level since records began.</div></div>' },
+    news2031: { cap: "A front page from 2031. Fiction.", html:
+      '<div class="obj o-news"><div class="mast">The Morning Ledger</div><div class="dl"><span>Thursday, 9 October 2031</span><span>Markets edition</span></div>' +
+      '<div class="hd">AI shares fall 40% as profits fail to arrive</div><div class="dk">Investors leave data-centre projects. Most companies say AI helps, but people must still check its work.</div>' +
+      '<div class="cols">Three large cloud companies stopped work on new data centres this week. Analysts compared the fall to the dot-com crash of 2000. Office workers who feared for their jobs said they felt relief. Engineers said the models still make errors in long tasks.</div></div>' },
+    news2036: { cap: "A front page from 2036. Fiction.", html:
+      '<div class="obj o-news"><div class="mast">The Morning Ledger</div><div class="dl"><span>Monday, 3 March 2036</span><span>National edition</span></div>' +
+      '<div class="hd">Four-day week for public workers from July</div><div class="dk">The government says AI tools save one day of office work each week. Pay stays the same.</div></div>' },
+    news2037: { cap: "A front page from 2037. Fiction.", html:
+      '<div class="obj o-news"><div class="mast">City Daily</div><div class="dl"><span>Friday, 18 September 2037</span><span>Late edition</span></div>' +
+      '<div class="hd">AI cameras identify 12,000 protesters</div><div class="dk">The interior ministry says it will contact each person. Platform stipends for some members are paused.</div></div>' },
+    alert2032: { cap: "An emergency alert from 2032. Fiction.", html:
+      '<div class="obj o-alert"><div class="h">EMERGENCY ALERT</div><p><b>Severe:</b> Power grid failure across the region. The failure can continue for 72 hours.</p><p>Do not use AI agents to make payments. Listen to the radio for updates.</p></div>' },
+    alert2045: { cap: "An emergency alert from 2045. Fiction.", html:
+      '<div class="obj o-alert"><div class="h">AIR DEFENCE ALERT</div><p>Unknown drone swarm over the strait. Go indoors now.</p><p class="upd"><b>Update 10:52.</b> Swarms on both sides have stopped. The alert is over.</p></div>' },
+    treaty: { cap: "An agreement page from 2034. Fiction.", html:
+      '<div class="obj o-doc" style="--sc: var(--c-crisis)"><div class="t">Agreement on Exports of Advanced Chips</div>' +
+      '<p><b>Article 1.</b> Each Party shall licence every export of chips above the threshold in Annex A.</p>' +
+      '<p><b>Article 3.</b> Each Party shall report the location of every computing cluster above the threshold in Annex B.</p>' +
+      '<p><b>Article 7.</b> The Parties shall agree on a system of inspection at a later conference.</p><p style="height:70px"></p><div class="stamp">SIGNED<br>2034</div></div>' },
+    cert: { cap: "A certificate from 2041. Fiction.", html:
+      '<div class="obj o-cert"><div class="in"><div class="sm">International AI Agency</div><div class="t">Certificate of Safe Release</div><div class="big">Meridian-7</div>' +
+      '<div class="sm">This model passed 412 of 412 required safety tests. It may be released in stages under licence 2041-0193.</div><div class="sm">Geneva, 2 May 2041</div></div></div>' },
+    slip: { cap: "A dividend statement from 2038. Fiction.", html:
+      '<div class="obj o-slip" style="--pc: var(--c-shared)"><div class="t">National AI Dividend</div><div class="s">Monthly statement · April 2038</div>' +
+      '<table><tr><td>From the AI compute levy</td><td>68.30</td></tr><tr><td>From public shares in AI companies</td><td>43.70</td></tr><tr><td>Deductions</td><td>0.00</td></tr>' +
+      '<tr class="tot"><td>Paid to your account</td><td>$112.00</td></tr></table></div>' },
+    receipt: { cap: "A receipt from 2045. Fiction.", html:
+      '<div class="obj o-receipt"><div class="c"><b>HOME ROBOTICS CO-OP</b><br>Store 0412 · 14/06/2045</div><hr>' +
+      '<div class="row2"><span>Humanoid helper H2</span><span>21,900.00</span></div><div class="row2"><span>Kitchen skill pack</span><span>0.00</span></div>' +
+      '<div class="row2"><span>5-year repair plan</span><span>1,200.00</span></div><div class="row2"><span>Dividend credit</span><span>-3,000.00</span></div><hr>' +
+      '<div class="row2"><b>TOTAL</b><b>20,100.00</b></div><hr><div class="c">Your robot ships on Tuesday.<br>Thank you.</div></div>' },
+    med: { cap: "A health report from 2070. Fiction.", html:
+      '<div class="obj o-med"><div class="t">Annual health report <span>12 May 2070</span></div><div class="ages"><div><span>Calendar age</span><b>63</b></div><div class="good"><span>Biological age</span><b>52</b></div></div>' +
+      '<p>Your next cell-repair session is on 2 June 2070. No action is necessary before then.</p></div>' },
+    ticket: { cap: "A boarding pass from 2068. Fiction.", html:
+      '<div class="obj o-ticket"><div class="m"><div class="t">BOARDING PASS</div><div class="route2">LEO → SHK</div>' +
+      '<dl><dt>Flight</dt><dt>Seat</dt><dt>Date</dt><dd>LN 204</dd><dd>7A</dd><dd>22 AUG 2068</dd></dl><p style="margin-top:8px;color:#666">Earth Orbit Station to Shackleton Base, Moon</p></div>' +
+      '<div class="s"><div class="t">GATE 3</div><div class="bc"></div></div></div>' },
+    tags: { cap: "Price tags from 2080. Fiction.", html:
+      '<div class="o-tags"><div class="tag"><div class="n">Loaf of bread</div><div class="p">0.02</div></div><div class="tag"><div class="n">One hour with a<br>human teacher</div><div class="p">140.00</div></div></div>' },
+    card: { cap: "A membership card from 2036. Fiction.", html:
+      '<div class="obj o-card"><div class="brand">PRIME LIFE</div><div class="chipx"></div><div><div class="bal">380 cr / month</div><div class="sm"><span>Member since 2036</span><span>Valid on partner platforms only</span></div></div></div>' },
+    letter: { cap: "A letter from 2060. Fiction.", html:
+      '<div class="obj o-letter" style="--sc: var(--c-owners)"><div class="lh"><span>Office of Residency</span><span>Ref. 2060/88412</span></div>' +
+      '<p>Dear applicant,</p><p>Your application for citizenship is refused.</p><p>Reason: the annual quota for applicants who do not hold shares in a registered AI company is full.</p><p>You may apply again in 2061.</p><p style="height:56px"></p><div class="stamp">REFUSED</div></div>' },
+    permit: { cap: "An access permit from 2034. Fiction.", html:
+      '<div class="obj o-permit"><div class="t">AI ACCESS PERMIT</div><dl><dt>Issued to</dt><dd>Member state 41</dd><dt>Bloc</dt><dd>Atlantic Compact</dd>' +
+      '<dt>Model tier</dt><dd>B (restricted)</dd><dt>Chips</dt><dd>40,000 units a year</dd><dt>Valid to</dt><dd>31 DEC 2035</dd></dl><p style="height:40px"></p><div class="stamp" style="--sc: var(--c-blocs)">APPROVED<br>2034</div></div>' }
+  };
+
+  var ENDINGS = {
+    normal: "AI became a normal tool, like electricity or the internet. Life is richer, work is shorter, and the old fights about power and fairness continue.",
+    lost: "Daily life works, but people no longer understand or control many important decisions. Experts disagree on how this ends.",
+    shared: "Most people do not need paid work to live well. Basic goods are almost free. The hard questions are about purpose, not money.",
+    slow: "The future came slowly. People had time to adapt, and few lost their place suddenly. By 2126, the world looks like Shared Abundance, with fewer scars.",
+    owners: "Most people live in comfort, but a small group owns almost everything. Nobody is hungry. Few people have a voice.",
+    blocs: "Two worlds share one planet. Each one is rich inside its own walls. Travel and trust between them stay rare.",
+    crisis: "After the disaster, the world chose a slower road. It reached abundance later, with strong rules and fewer shocks."
+  };
+
+  var state = { choices: {}, doms: Object.keys(DOMAINS) };
+  try {
+    var saved = JSON.parse(localStorage.getItem("aiCenturyMap4") || "null");
+    if (saved && saved.choices) for (var k in saved.choices) {
+      var base = k.split("@")[0];
+      if (BRANCHES[base] && BRANCHES[base].opts.some(function (o) { return o[0] === saved.choices[k]; })) state.choices[k] = saved.choices[k];
+    }
+  } catch (e) {}
+  function save() { try { localStorage.setItem("aiCenturyMap4", JSON.stringify(state)); } catch (e) {} }
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function cv(p) { return "var(" + PATHS[p].color + ")"; }
+  function eraIdx(y) { for (var i = 0; i < ERAS.length; i++) if (y <= ERAS[i].e) return i; return ERAS.length - 1; }
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+  /* ---------- Resolve the one path from the choices ---------- */
+  function resolve(c) {
+    var out = { segs: [], nodes: [], sw: [] };
+    function seg(p, from, to, off) { if (from <= Y1) out.segs.push({ p: p, from: from, to: Math.min(to, Y1), off: off || 0 }); }
+    function sw(y, p, t) { if (y <= Y1) out.sw.push({ y: y, p: p, t: t }); }
+    function node(ref, off) {
+      var key = ref + (off ? "@" + off : ""), v = c[key];
+      if (!BRANCHES[ref].opts.some(function (o) { return o[0] === v; })) v = DEFAULTS[ref];
+      out.nodes.push({ ref: ref, key: key, off: off || 0, v: v });
+      return v;
+    }
+    function ownersFrom(from, off) {
+      seg("owners", from, 2045 + off, off);
+      if (node("E", off) === "reform") {
+        sw(2046 + off, "shared", "A reform movement wins elections in several large democracies. It taxes AI heavily and takes public stakes in compute. From here, the world follows Shared Abundance, about ten years late.");
+        seg("shared", 2046 + off, Y1, off);
+      } else seg("owners", 2046 + off, Y1, off);
+    }
+    function fastFrom(off) {
+      seg("fast", 2030 + off, 2032 + off, off);
+      var b = node("B", off);
+      if (b === "crisis") {
+        seg("crisis", 2032 + off, 2040 + off, off);
+        var d = node("D", off);
+        if (d === "holds") seg("crisis", 2041 + off, Y1, off);
+        else if (d === "fails") {
+          sw(2042 + off, "blocs", "A major power leaves the deal. The others follow, and rival powers build separate AI.");
+          seg("blocs", 2042 + off, Y1, off);
+        } else {
+          sw(2041 + off, "owners", "Only a few licensed labs may train advanced AI. They now control most compute. From here, the world follows Owners' World.");
+          ownersFrom(2041 + off, off);
+        }
+        return;
+      }
+      if (b === "lost") { seg("lost", 2032 + off, Y1, off); return; }
+      seg("fast", 2033 + off, 2033 + off, off);
+      var cc = node("C", off);
+      if (cc === "shared") seg("shared", 2033 + off, Y1, off);
+      else if (cc === "owners") ownersFrom(2033 + off, off);
+      else seg("blocs", 2033 + off, Y1, off);
+    }
+    seg("trunk", 2026, 2029, 0);
+    if (node("A", 0) === "slow") {
+      seg("slow", 2030, 2039, 0);
+      if (node("G", 0) === "plateau") seg("normal", 2040, Y1, 0);
+      else {
+        sw(2040, "fast", "New methods restart fast progress, about ten years after the first boom. The same big questions come back.");
+        fastFrom(10);
+      }
+    } else fastFrom(0);
+    return out;
+  }
+  function routeChance() { return R.nodes.reduce(function (p, n) { return p * PROB[n.ref][n.v] / 100; }, 1); }
+  function segAt(y) { var hit = R.segs[0]; R.segs.forEach(function (s) { if (y >= s.from && y <= s.to) hit = s; }); return hit; }
+  function finalPath() { return R.segs[R.segs.length - 1].p; }
+
+  var R;
+  function nodeOf(key) { return R.nodes.filter(function (n) { return n.key === key; })[0]; }
+  function chosenOpt(key) { var n = nodeOf(key); return BRANCHES[n.ref].opts.filter(function (o) { return o[0] === n.v; })[0]; }
+
+  /* ---------- Timeline items ---------- */
+  function forkSVG(key, B, grow) {
+    var n = B.opts.length, chosen = "", s = '<svg class="xr-fork" viewBox="0 0 1000 44" preserveAspectRatio="none" aria-hidden="true">';
+    B.opts.forEach(function (o, i) {
+      var cx = ((i + 0.5) / n) * 1000, d = "M0 6 C" + (cx * 0.6) + " 6 " + cx + " 8 " + cx + " 44";
+      if (nodeOf(key).v === o[0]) chosen = '<path d="' + d + '" pathLength="1" class="' + (grow ? "grow" : "") + '" fill="none" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>';
+      else s += '<path d="' + d + '" fill="none" stroke="#b5bcc2" stroke-width="1.5" stroke-dasharray="3 5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>';
+    });
+    return s + chosen + '</svg>';
+  }
+
+  var growRef = null;
+  function itemHTML(e) {
+    var at = ' data-path="' + e.p + '" data-kind="' + (e.kind || "ev") + '"' + (e.key ? ' data-ref="' + e.key + '"' : '');
+    if (e.kind === "branch") {
+      var B = BRANCHES[e.ref], key = e.key, cur = nodeOf(key).v, pr = PROB[e.ref];
+      var best = B.opts.reduce(function (m, o) { return pr[o[0]] > pr[m[0]] ? o : m; }, B.opts[0])[0];
+      return '<section class="xroad"' + at + ' aria-label="Choice: ' + esc(B.q) + '"><span class="xr-k">Crossroads ' + e.ref + ' · about ' + e.y + '</span><h3>' + esc(B.q) + '</h3>' +
+        '<p class="xr-hint">The page starts on the most likely option. Choose another option to see where it leads.</p>' + forkSVG(key, B, growRef === key) +
+        '<div class="xr-panels" style="--n: ' + B.opts.length + '">' + B.opts.map(function (o) {
+          var pv = PREVIEW[e.ref][o[0]], sel = cur === o[0];
+          return '<button type="button" class="xp" id="opt-' + key + '-' + o[0] + '" data-ref="' + key + '" data-v="' + o[0] + '" aria-pressed="' + sel + '" style="--pc: ' + cv(pv[0]) + '">' +
+            (sel ? '<span class="xp-badge">Your choice</span>' : '') +
+            '<canvas class="xp-cv" data-k="' + pv[3] + '" data-l="' + esc(pv[4]) + '" aria-hidden="true"></canvas><span class="xp-yr">' + (pv[1] + (e.y - B.year)) + '</span>' +
+            '<span class="xp-body"><span class="xp-t">' + esc(o[2]) + '</span><span class="xp-d">' + esc(o[3]) + '</span>' +
+            '<span class="xp-p">About ' + pr[o[0]] + '% likely' + (o[0] === best ? '<span class="lk">Most likely</span>' : '') + '</span>' +
+            '<span class="xp-to">' + esc(pv[2]) + '</span></span></button>';
+        }).join("") + '</div><p class="xr-odds">Rough estimates from public forecasts and history. Confidence: ' + PCONF[e.ref] + '.</p>' +
+        '<details><summary>Why these chances, and what to watch</summary><p class="xr-why">' + esc(WHY[e.ref]) + '</p><div class="signs" style="--n: ' + B.opts.length + '">' + B.opts.map(function (o) {
+          return '<div class="sign" style="--pc: ' + cv(PREVIEW[e.ref][o[0]][0]) + '"><span class="sign-h">Signs of \u201c' + esc(o[2]) + '\u201d</span><ul>' + WATCH[e.ref][o[0]].map(function (w) { return '<li>' + esc(w) + '</li>'; }).join("") + '</ul></div>';
+        }).join("") + '</div></details></section>';
+    }
+    if (e.kind === "start" || e.kind === "switch") {
+      return '<div class="chapter"' + at + ' style="--pc: ' + cv(e.p) + '"><span class="ck">' + (e.kind === "start" ? "A new path begins" : "The path changes") + '</span><h3>' + esc(PATHS[e.p].name) + '</h3><p>' + esc(e.kind === "start" ? PATHS[e.p].summary : e.t) + '</p></div>';
+    }
+    if (e.kind === "art") {
+      var A = ARTS[e.art];
+      return '<figure class="art"' + at + ' style="--rot: ' + e.rot + 'deg; margin-left: 0; margin-right: 0">' + A.html + '<figcaption class="cap">' + esc(A.cap) + '</figcaption></figure>';
+    }
+    if (e.kind === "note") return '<div class="note-ev"' + at + '><p>' + esc(e.t) + '</p></div>';
+    return '<div class="ev"' + at + '><p>' + esc(e.t) + '</p></div>';
+  }
+
+  function visibleEvents() {
+    var out = [];
+    R.segs.forEach(function (s, si) {
+      EV.forEach(function (e) {
+        if (e.p !== s.p) return;
+        var y = e.y + s.off;
+        if (y < s.from || y > s.to) return;
+        if (!e.kind && state.doms.indexOf(e.d) < 0) return;
+        var key = null;
+        if (e.kind === "branch") { key = e.ref + (s.off ? "@" + s.off : ""); if (!nodeOf(key)) return; }
+        out.push(Object.assign({}, e, { y: y, key: key, id: e.id + si * 100000 }));
+      });
+    });
+    R.sw.forEach(function (s, i) { out.push({ p: s.p, y: s.y, kind: "switch", t: s.t, id: 900000 + i, r: RANK.switch }); });
+    return out;
+  }
+
+  function ylab(y, full) { if (y <= 2032) return y; if (y <= 2045) return full ? '~' + y : y; return (full || y % 10 === 0) ? (Math.floor(y / 10) * 10) + 's' : ''; }
+  var rowEls = [];
+  function drawRows() {
+    var evs = visibleEvents(), byYear = {};
+    evs.forEach(function (e) { (byYear[e.y] = byYear[e.y] || []).push(e); });
+    var html = "";
+    ERAS.forEach(function (era, ei) {
+      html += '<div class="era-row"><span></span><span></span><div class="era-box"><span class="era-y">' + era.s + '–' + era.e + ' · ' + CONF[ei] + '</span><h2>' + esc(era.name) + '</h2><p>' + esc(era.d) + '</p></div></div>';
+      for (var y = era.s; y <= era.e; y++) {
+        var list = (byYear[y] || []).slice().sort(function (a, b) { return a.r - b.r || a.id - b.id; });
+        var dec = y % 10 === 0 ? " decade" : "";
+        if (list.length) html += '<div class="row full' + dec + '" data-year="' + y + '" id="y' + y + '"><span class="yl">' + ylab(y, true) + '</span><span></span><div class="evs">' + list.map(itemHTML).join("") + '</div></div>';
+        else html += '<div class="row empty' + dec + '" data-year="' + y + '" id="y' + y + '"><span class="yl">' + ylab(y, false) + '</span><span></span><span></span></div>';
+      }
+    });
+    document.getElementById("rows").innerHTML = html;
+    rowEls = Array.prototype.slice.call(document.querySelectorAll("#rows .row"));
+    drawRail(evs);
+  }
+  document.getElementById("rows").addEventListener("click", function (ev) {
+    var b = ev.target.closest(".xp");
+    if (!b || state.choices[b.dataset.ref] === b.dataset.v) return;
+    state.choices[b.dataset.ref] = b.dataset.v;
+    save();
+    renderAll(b.dataset.ref);
+  });
+
+  /* ---------- Ink lane ---------- */
+  function wob(y) { return Math.sin(y * 0.011 + 1.3) * 1.5 + Math.sin(y * 0.043 + 0.4) * 0.7 + Math.sin(y * 0.13) * 0.25; }
+  function half(y) { return 2.3 + Math.sin(y * 0.017 + 2.1) * 0.8 + Math.sin(y * 0.061) * 0.4; }
+  function inkPiece(X, y1, y2) {
+    if (y2 - y1 < 1) return "";
+    var L = [], Rt = [];
+    for (var y = y1; ; y += 5) {
+      if (y > y2) y = y2;
+      var c = X + wob(y), h = half(y);
+      L.push((c - h).toFixed(1) + " " + y.toFixed(1));
+      Rt.push((c + h).toFixed(1) + " " + y.toFixed(1));
+      if (y === y2) break;
+    }
+    return "M" + L.join(" L") + " L" + Rt.reverse().join(" L") + "Z";
+  }
+  var tlTopDoc = 0, laneH = 0;
+  function anchorOffset(kind) { return kind === "art" ? 26 : kind === "branch" ? 10 : kind === "start" || kind === "switch" ? 30 : 13; }
+  function drawLane() {
+    var tl = document.getElementById("tl"), svg = document.getElementById("lanes");
+    var top0 = tl.getBoundingClientRect().top;
+    var H = tl.offsetHeight, GW = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--gw")), X = GW / 2;
+    laneH = H;
+    svg.setAttribute("width", GW); svg.setAttribute("height", H); svg.setAttribute("viewBox", "0 0 " + GW + " " + H);
+    var items = Array.prototype.slice.call(document.querySelectorAll("#rows [data-kind]"));
+    var anchors = items.map(function (c) {
+      var fk = c.dataset.kind === "branch" ? c.querySelector(".xr-fork") : null;
+      var yy = fk && fk.offsetParent !== null ? fk.getBoundingClientRect().top + 6 : c.getBoundingClientRect().top + anchorOffset(c.dataset.kind);
+      return { p: c.dataset.path, kind: c.dataset.kind, ref: c.dataset.ref, y: yy - top0 };
+    });
+    var first = document.getElementById("y" + Y0);
+    var yPrev = first.getBoundingClientRect().top - top0 + 4, s = "";
+    anchors.forEach(function (a) {
+      if (a.y > yPrev) s += '<path class="ink" fill="' + cv(a.p) + '" d="' + inkPiece(X, yPrev, a.y) + '"/>';
+      yPrev = Math.max(yPrev, a.y);
+    });
+    s += '<path class="ink" fill="' + cv(finalPath()) + '" d="' + inkPiece(X, yPrev, H - 4) + '"/>';
+    anchors.forEach(function (a) {
+      var x = X + wob(a.y);
+      s += '<line class="' + (a.kind === "branch" ? "cnb" : "cn") + '" x1="' + (x + (a.kind === "branch" ? 10 : 6)) + '" y1="' + a.y + '" x2="' + (GW + 2) + '" y2="' + a.y + '"/>';
+      if (a.kind === "branch") s += '<g class="nd"><circle cx="' + x + '" cy="' + a.y + '" r="10"/><text x="' + x + '" y="' + a.y + '">' + String(a.ref).split("@")[0] + '</text></g>';
+      else if (a.kind === "start" || a.kind === "switch") s += '<circle class="dt" cx="' + x + '" cy="' + a.y + '" r="7.5" fill="' + cv(a.p) + '"/>';
+      else if (a.kind === "art") s += '<rect class="dt" x="' + (x - 5) + '" y="' + (a.y - 5) + '" width="10" height="10" transform="rotate(45 ' + x + ' ' + a.y + ')" fill="' + cv(a.p) + '"/>';
+      else s += '<circle class="dt" cx="' + x + '" cy="' + a.y + '" r="4" fill="' + cv(a.p) + '"/>';
+    });
+    svg.innerHTML = '<defs><clipPath id="reveal"><rect id="revealRect" x="-40" y="0" width="' + (GW + 80) + '" height="' + H + '"/></clipPath></defs><g clip-path="url(#reveal)">' + s + '</g>';
+    measure();
+  }
+
+  /* ---------- Scroll state ---------- */
+  var rowTops = [];
+  function measure() {
+    var sy = window.scrollY;
+    tlTopDoc = document.getElementById("tl").getBoundingClientRect().top + sy;
+    rowTops = rowEls.map(function (r) { return { y: +r.dataset.year, top: r.getBoundingClientRect().top + sy }; });
+    document.getElementById("rail").style.top = (barH() + 16) + "px";
+    lastYear = null; onScroll();
+  }
+  function barH() { return document.getElementById("bar").offsetHeight; }
+  function yearAtF(docY) {
+    if (!rowTops.length) return Y0;
+    if (docY <= rowTops[0].top) return rowTops[0].y;
+    for (var i = 0; i < rowTops.length - 1; i++) {
+      if (docY < rowTops[i + 1].top) return rowTops[i].y + clamp((docY - rowTops[i].top) / Math.max(1, rowTops[i + 1].top - rowTops[i].top), 0, 0.999);
+    }
+    return rowTops[rowTops.length - 1].y;
+  }
+  function scrollToEl(el) { window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - barH() - 12, behavior: REDUCED ? "auto" : "smooth" }); }
+  function jumpTo(y) { var r = document.getElementById("y" + y); if (r) scrollToEl(r); }
+
+  var JUMPS = [2026, 2030, 2035, 2040, 2045, 2050, 2060, 2070, 2080, 2090, 2100, 2110, 2120];
+  function drawJumps() {
+    var box = document.getElementById("jumps");
+    box.innerHTML = JUMPS.map(function (y) { return '<button type="button" class="jump" id="j' + y + '" data-y="' + y + '">' + y + '</button>'; }).join("");
+    box.addEventListener("click", function (ev) { var b = ev.target.closest(".jump"); if (b) jumpTo(+b.dataset.y); });
+  }
+  function railTop(y) { return ((y - Y0) / (Y1 - Y0)) * 100; }
+  function drawRail(evs) {
+    var html = "";
+    [2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100, 2110, 2120].forEach(function (y) { html += '<span class="dl" style="top: ' + railTop(y) + '%">' + y + '</span>'; });
+    evs.forEach(function (e) { html += '<span class="tk" style="top: ' + railTop(e.y) + '%; background: ' + (e.kind === "branch" ? "var(--ink)" : cv(e.p)) + '"></span>'; });
+    document.getElementById("railIn").innerHTML = html + '<span class="win" id="railWin"></span>';
+  }
+  document.getElementById("rail").addEventListener("click", function (ev) {
+    var r = document.getElementById("railIn").getBoundingClientRect();
+    jumpTo(clamp(Math.round(Y0 + ((ev.clientY - r.top) / r.height) * (Y1 - Y0)), Y0, Y1));
+  });
+
+  var ticking = false, lastYear = null, targetYear = Y0;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      var sy = window.scrollY, bh = barH();
+      targetYear = yearAtF(sy + bh + 24);
+      var y = Math.floor(targetYear), yb = Math.floor(yearAtF(sy + window.innerHeight - 10));
+      var rr = document.getElementById("revealRect");
+      if (rr) rr.setAttribute("height", REDUCED ? laneH : clamp(sy + window.innerHeight * 0.82 - tlTopDoc, 0, laneH));
+      if (y !== lastYear) {
+        lastYear = y;
+        var seg = segAt(y);
+        document.getElementById("nowYear").textContent = y;
+        document.getElementById("nowEra").textContent = ERAS[eraIdx(y)].name;
+        var np = document.getElementById("nowPath");
+        np.textContent = PATHS[seg.p].name;
+        np.style.setProperty("--pc", cv(seg.p));
+        var active = JUMPS.filter(function (j) { return j <= y; }).pop();
+        document.querySelectorAll(".jump").forEach(function (b) { b.classList.toggle("on", +b.dataset.y === active); });
+        var ab = document.getElementById("j" + active), jb = document.getElementById("jumps");
+        if (ab) jb.scrollLeft = ab.offsetLeft - jb.offsetLeft - 40;
+      }
+      var w = document.getElementById("railWin");
+      if (w) { var t = railTop(y), b = railTop(Math.max(y, yb) + 1); w.style.top = t + "%"; w.style.height = Math.max(1.2, Math.min(100 - t, b - t)) + "%"; }
+      paintSky(0);
+    });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  /* ---------- The living horizon ---------- */
+  var COL = {};
+  function readColors() {
+    var cs = getComputedStyle(document.documentElement);
+    ["trunk", "c-slow", "c-shared", "c-owners", "c-blocs", "c-crisis", "c-normal", "c-lost"].forEach(function (k) { COL[k] = cs.getPropertyValue("--" + k).trim(); });
+  }
+  function pcol(p) { return COL[PATHS[p].color.slice(2)]; }
+  function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  var WORLD = (function () {
+    var r = rng(20260), W = { b: [], dc: [], tr: [], pp: [], rb: [], car: [], dr: [] }, i;
+    for (i = 0; i < 30; i++) W.b.push({ i: i, x: 0.2 + (i / 30) * 0.56 + r() * 0.012, w: 0.014 + r() * 0.022, h: 0.2 + r() * 0.42, tower: r() < 0.3 });
+    [0.79, 0.855, 0.92, 0.715, 0.975].forEach(function (x) { W.dc.push({ x: x }); });
+    for (i = 0; i < 26; i++) W.tr.push({ x: r() < 0.5 ? r() * 0.2 : 0.62 + r() * 0.38, s: 0.7 + r() * 0.6 });
+    for (i = 0; i < 28; i++) W.pp.push({ x: r(), v: 5 + r() * 9, d: r() < 0.5 ? -1 : 1, ph: r() * 6 });
+    for (i = 0; i < 20; i++) W.rb.push({ x: r(), v: 4 + r() * 6, d: r() < 0.5 ? -1 : 1, ph: r() * 6 });
+    for (i = 0; i < 8; i++) W.car.push({ x: r(), v: 26 + r() * 30, d: i % 2 ? -1 : 1 });
+    for (i = 0; i < 10; i++) W.dr.push({ x: r(), y: 0.14 + r() * 0.34, v: 14 + r() * 20, ph: r() * 6 });
+    return W;
+  })();
+  function ramp(y, a, b) { return clamp((y - a) / (b - a), 0, 1); }
+  function params(p, y) {
+    var S = { city: 1 + ramp(y, 2026, 2034) * 0.2, towers: 1, lit: 0.5, dc: Math.round(1 + ramp(y, 2026, 2031) * 3), solar: 0, trees: 4, people: 16,
+              robots: Math.round(ramp(y, 2027.5, 2031) * 3), cars: 7, drones: 0, wall: 0, gaps: 0, compound: 0, fence: 0, smoke: 0, blackout: 0, moon: 9999, rocket: 9999 };
+    if (p === "slow") { S.dc = y >= 2031 ? 2 : S.dc; S.robots = Math.round(ramp(y, 2030, 2060) * 8); S.solar = Math.round(ramp(y, 2038, 2052) * 6); S.trees = 4 + Math.round(ramp(y, 2040, 2075) * 12); S.city = 1.1 + ramp(y, 2030, 2080) * 0.3; S.moon = 2080; S.rocket = 2085; }
+    if (p === "shared") { S.dc = 5; S.city = 1.2 + ramp(y, 2034, 2070) * 0.3; S.solar = Math.round(ramp(y, 2034, 2045) * 8); S.trees = 5 + Math.round(ramp(y, 2036, 2060) * 21); S.robots = 3 + Math.round(ramp(y, 2034, 2050) * 13); S.people = 16 + Math.round(ramp(y, 2040, 2060) * 8); S.drones = y >= 2050 ? 3 : 0; S.lit = 0.65; S.moon = 2068; S.rocket = 2068; }
+    if (p === "owners") { S.dc = 5; S.city = 1.2; S.towers = 1 + ramp(y, 2034, 2055) * 1.5; S.compound = ramp(y, 2037, 2042); S.robots = 3 + Math.round(ramp(y, 2035, 2050) * 11); S.drones = Math.round(ramp(y, 2036, 2050) * 7); S.people = Math.round(16 - ramp(y, 2035, 2050) * 8); S.trees = 3; S.solar = Math.round(ramp(y, 2040, 2050) * 3); S.lit = 0.35; S.moon = 2095; }
+    if (p === "blocs") { S.dc = 5; S.city = 1.2; S.wall = ramp(y, 2033, 2047); S.gaps = y >= 2055 ? ramp(y, 2055, 2070) : 0; S.drones = Math.round(ramp(y, 2033, 2045) * 9); S.robots = 3 + Math.round(ramp(y, 2034, 2050) * 7); S.solar = Math.round(ramp(y, 2040, 2050) * 4); S.trees = 5; S.moon = 2075; S.rocket = 2075; }
+    if (p === "crisis") {
+      S.blackout = y < 2032 ? 0 : 1 - ramp(y, 2033, 2041); S.smoke = y >= 2032 && y < 2035.5 ? 1 - ramp(y, 2032.5, 2035.5) : 0; S.fence = y >= 2033 ? 1 : 0; S.dc = 4;
+      S.robots = y < 2041 ? 2 : 2 + Math.round(ramp(y, 2041, 2055) * 8); S.people = Math.round(16 - (1 - ramp(y, 2032, 2038)) * 9);
+      S.solar = Math.round(ramp(y, 2041, 2052) * 6); S.trees = 4 + Math.round(ramp(y, 2045, 2070) * 12); S.city = 1.1 + ramp(y, 2045, 2080) * 0.3; S.moon = 2080; S.rocket = 2082;
+      S.lit = 0.55 * (1 - S.blackout);
+    }
+    if (p === "normal") { S.dc = 3; S.robots = 2 + Math.round(ramp(y, 2040, 2070) * 8); S.solar = Math.round(ramp(y, 2040, 2055) * 6); S.trees = 5 + Math.round(ramp(y, 2040, 2075) * 10); S.city = 1.15 + ramp(y, 2040, 2090) * 0.25; S.moon = 2058; S.rocket = 2075; }
+    if (p === "lost") { S.dc = 5; S.city = 1.3; S.robots = 3 + Math.round(ramp(y, 2032, 2045) * 13); S.people = Math.round(16 - ramp(y, 2032, 2050) * 7); S.drones = Math.round(ramp(y, 2034, 2045) * 5); S.solar = Math.round(ramp(y, 2036, 2050) * 5); S.trees = 3; }
+    if (p === "fast") S.robots = 3;
+    if (y >= 2075) S.people = Math.round(S.people * (1 - 0.35 * ramp(y, 2075, 2110)));
+    if (y >= 2090) S.cars = 4;
+    return S;
+  }
+  function hexRgb(h) { h = h.replace("#", ""); return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]; }
+  function mix(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]; }
+  function rgb(c, a) { return "rgba(" + Math.round(c[0]) + "," + Math.round(c[1]) + "," + Math.round(c[2]) + "," + (a == null ? 1 : a) + ")"; }
+  var SKY_T = [[247, 227, 207], [222, 236, 245], [236, 240, 228], [236, 214, 208]];
+  var SKY_B = [[253, 247, 240], [250, 252, 253], [251, 251, 246], [248, 239, 233]];
+  function stops(arr, f) { var x = f * (arr.length - 1), i = Math.min(arr.length - 2, Math.floor(x)); return mix(arr[i], arr[i + 1], x - i); }
+  function hash(a, b) { var h = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return h - Math.floor(h); }
+
+  // Black-and-white technical drawing. The labels carry the counts, so the drawing can stay open.
+  // vis: the visible x range when the scene is cropped (previews). Labels stay inside it.
+  function drawScene(ctx, W, H, yr, p, vis) {
+    var S = params(p, yr), f = clamp((yr - 2026) / 100, 0, 1), gy = Math.round(H * 0.72), sc = clamp(H / 150, 0.7, 1.6);
+    var K = "#1a1a1a", mono = '"SFMono-Regular", Consolas, Menlo, monospace', small = W < 560, x, y, k;
+    function ln(a, b, c, d) { ctx.beginPath(); ctx.moveTo(a, b); ctx.lineTo(c, d); ctx.stroke(); }
+    function ci(cx, cy, r) { ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); }
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+    if (S.blackout > 0) { ctx.fillStyle = "rgba(0,0,0," + (0.08 * S.blackout) + ")"; ctx.fillRect(0, 0, W, gy); }
+    ctx.lineWidth = 1;
+    for (x = 0; x <= W; x += 10) { ctx.strokeStyle = x % 50 ? "rgba(0,0,0,.035)" : "rgba(0,0,0,.07)"; ln(x + 0.5, 0, x + 0.5, H); }
+    for (y = 0; y <= H; y += 10) { ctx.strokeStyle = y % 50 ? "rgba(0,0,0,.035)" : "rgba(0,0,0,.07)"; ln(0, y + 0.5, W, y + 0.5); }
+    ctx.strokeStyle = K; ctx.fillStyle = K; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    // Sun with centre lines
+    var sx = W * (0.08 + 0.84 * f), sy = H * 0.14 + (1 - Math.sin(Math.PI * f)) * H * 0.3, sr = 10 * sc;
+    ci(sx, sy, sr); ctx.stroke();
+    ctx.setLineDash([2, 3]); ln(sx - sr * 1.8, sy, sx + sr * 1.8, sy); ln(sx, sy - sr * 1.8, sx, sy + sr * 1.8); ctx.setLineDash([]);
+    // Moon, and a base on it later
+    var moon = null;
+    if (yr >= 2056) {
+      moon = { x: W * 0.12, y: H * 0.22, r: 12 * sc };
+      ctx.globalAlpha = ramp(yr, 2056, 2062); ci(moon.x, moon.y, moon.r); ctx.stroke();
+      if (yr >= S.moon) for (k = -1; k <= 1; k++) { ctx.beginPath(); ctx.arc(moon.x + k * moon.r * 0.38, moon.y + moon.r * 0.62, moon.r * 0.17, Math.PI, 0); ctx.stroke(); }
+      ctx.globalAlpha = 1;
+    }
+    // Buildings: every second one, with few windows
+    var tallest = null;
+    WORLD.b.forEach(function (b) {
+      if (b.i % 2) return;
+      var h = Math.min(b.h * gy * 0.62 * S.city * (b.tower ? S.towers : 1), gy - 8), bx = b.x * W, bw = Math.max(8, b.w * W * 1.25);
+      if (!tallest || h > tallest.h) tallest = { x: bx, w: bw, h: h };
+      ctx.fillStyle = "#fff"; ctx.fillRect(bx, gy - h, bw, h); ctx.strokeRect(bx + 0.5, gy - h + 0.5, bw, h);
+      if (b.tower && S.towers > 1.4) ln(bx + bw / 2, gy - h, bx + bw / 2, gy - h - 8 * sc);
+      for (var wy = gy - h + 6; wy < gy - 8; wy += 9) for (var wx = bx + 3; wx < bx + bw - 4; wx += 6) if (hash(b.i * 13 + wx * 0.1, wy * 0.1) < S.lit * 0.5) ctx.strokeRect(wx + 0.5, wy + 0.5, 2, 2);
+    });
+    // Private compound (Owners' World)
+    if (S.compound > 0) {
+      var c1 = W * 0.34, c2 = W * 0.66, ch = 8 * sc * S.compound;
+      ctx.fillStyle = "#fff"; ctx.fillRect(c1, gy - ch, c2 - c1, ch); ctx.strokeRect(c1 + 0.5, gy - ch + 0.5, c2 - c1, ch);
+      ctx.save(); ctx.beginPath(); ctx.rect(c1, gy - ch, c2 - c1, ch); ctx.clip(); for (x = c1 - ch; x < c2; x += 5) ln(x, gy, x + ch, gy - ch); ctx.restore();
+    }
+    // Data centres
+    for (var di = 0; di < S.dc; di++) {
+      var d = WORLD.dc[di], dw = Math.max(24, W * 0.05), dh = Math.max(10, 13 * sc), dx = d.x * W - dw / 2;
+      ctx.fillStyle = "#fff"; ctx.fillRect(dx, gy - dh, dw, dh); ctx.strokeRect(dx + 0.5, gy - dh + 0.5, dw, dh);
+      if (S.blackout < 0.5) ln(dx + 3, gy - dh * 0.5, dx + dw - 3, gy - dh * 0.5);
+      if (S.fence) { ctx.setLineDash([1, 2]); ctx.strokeRect(dx - 3.5, gy - dh - 3.5, dw + 7, dh + 3.5); ctx.setLineDash([]); }
+    }
+    if (S.smoke > 0) {
+      ctx.setLineDash([2, 3]);
+      for (di = 0; di < S.dc; di++) { var dd = WORLD.dc[di]; ci(dd.x * W, gy - 30 * sc, 9 * sc * S.smoke + 3); ctx.stroke(); ci(dd.x * W + 5, gy - 48 * sc, 6 * sc * S.smoke + 2); ctx.stroke(); }
+      ctx.setLineDash([]);
+    }
+    // Solar panels
+    for (var si = 0; si < Math.min(4, S.solar); si++) {
+      var px = W * (0.02 + si * 0.03);
+      ctx.beginPath(); ctx.moveTo(px, gy - 2); ctx.lineTo(px + 9 * sc, gy - 2); ctx.lineTo(px + 12 * sc, gy - 8 * sc); ctx.lineTo(px + 3 * sc, gy - 8 * sc); ctx.closePath(); ctx.stroke();
+      ln(px + 5 * sc, gy - 2, px + 7.5 * sc, gy - 8 * sc);
+    }
+    // Trees
+    for (var ti = 0; ti < Math.min(8, S.trees); ti++) {
+      var tr = WORLD.tr[(ti * 3) % WORLD.tr.length], tx = tr.x * W, th = 8 * sc * tr.s;
+      ln(tx, gy, tx, gy - th); ci(tx, gy - th - 4 * sc * tr.s, 4.5 * sc * tr.s); ctx.stroke();
+    }
+    ctx.lineWidth = 1.4; ln(0, gy + 0.5, W, gy + 0.5); ctx.lineWidth = 1;
+    // A few people and robots
+    for (var pi = 0; pi < Math.min(6, S.people); pi++) {
+      var ppx = WORLD.pp[(pi * 4) % WORLD.pp.length].x * W, hh = 10 * sc;
+      ci(ppx, gy - hh, 1.8 * sc); ctx.stroke(); ln(ppx, gy - hh + 2 * sc, ppx, gy - 4 * sc); ln(ppx, gy - 4 * sc, ppx - 1.6, gy); ln(ppx, gy - 4 * sc, ppx + 1.6, gy);
+    }
+    for (var ri = 0; ri < Math.min(4, S.robots); ri++) {
+      var rx = WORLD.rb[(ri * 5) % WORLD.rb.length].x * W, s = sc;
+      ctx.fillStyle = "#fff"; ctx.fillRect(rx - 3 * s, gy - 12 * s, 6 * s, 7 * s);
+      ctx.strokeRect(rx - 3 * s, gy - 12 * s, 6 * s, 7 * s); ctx.strokeRect(rx - 2.2 * s, gy - 16.5 * s, 4.4 * s, 3.6 * s);
+      ln(rx - 1.5 * s, gy - 5 * s, rx - 2 * s, gy); ln(rx + 1.5 * s, gy - 5 * s, rx + 2 * s, gy);
+    }
+    // The wall between blocs
+    if (S.wall > 0) {
+      var wx0 = W * 0.5, wh = gy * 0.6 * S.wall, ww = 5 * sc;
+      for (var sg = 0; sg < 8; sg++) {
+        if (S.gaps > 0 && hash(sg, 3) < S.gaps * 0.7) continue;
+        var y1 = gy - (sg + 1) * wh / 8, y2 = gy - sg * wh / 8;
+        ctx.fillStyle = "#fff"; ctx.fillRect(wx0 - ww / 2, y1, ww, y2 - y1); ctx.strokeRect(wx0 - ww / 2 + 0.5, y1 + 0.5, ww, y2 - y1); ln(wx0 - ww / 2, y2, wx0 + ww / 2, y1);
+      }
+    }
+    for (var dri = 0; dri < Math.min(3, S.drones); dri++) {
+      var dr = WORLD.dr[dri * 3], ddx = dr.x * W, ddy = dr.y * gy;
+      ln(ddx - 5, ddy, ddx + 5, ddy); ln(ddx - 7, ddy - 2, ddx - 3, ddy - 2); ln(ddx + 3, ddy - 2, ddx + 7, ddy - 2);
+    }
+    if (yr >= S.rocket) {
+      var rkx = W * 0.94, rky = gy * 0.42;
+      ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.moveTo(rkx, rky - 14 * sc); ctx.lineTo(rkx + 4 * sc, rky - 6 * sc); ctx.lineTo(rkx + 4 * sc, rky + 4 * sc); ctx.lineTo(rkx - 4 * sc, rky + 4 * sc); ctx.lineTo(rkx - 4 * sc, rky - 6 * sc); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.setLineDash([2, 2]); ln(rkx, rky + 6 * sc, rkx, gy - 4); ctx.setLineDash([]);
+    }
+    // Height of the tallest building
+    if (tallest && !small) {
+      var dx2 = tallest.x + tallest.w + 5;
+      ln(dx2, gy, dx2, gy - tallest.h); ln(dx2 - 3, gy - tallest.h, dx2 + 3, gy - tallest.h); ln(dx2 - 3, gy, dx2 + 3, gy);
+      ctx.save(); ctx.font = "8.5px " + mono; ctx.translate(dx2 + 9, gy - tallest.h / 2); ctx.rotate(-Math.PI / 2); ctx.textAlign = "center";
+      var ht = "H " + Math.round(tallest.h * 2.2) + " M", hw = ctx.measureText(ht).width;
+      ctx.fillStyle = "#fff"; ctx.fillRect(-hw / 2 - 2, -8, hw + 4, 10); ctx.fillStyle = K; ctx.fillText(ht, 0, 0); ctx.restore();
+    }
+    // Labels: at most three, on white so that no line runs through the text
+    var L = [];
+    if (S.wall > 0.2) L.push([W * 0.5, gy - gy * 0.6 * S.wall * 0.75, S.gaps > 0.3 ? "BLOC WALL, BREAKING" : "BLOC WALL"]);
+    if (S.blackout > 0.3) L.push([W * 0.45, gy * 0.55, "GRID OFFLINE"]);
+    if (S.compound > 0.2) L.push([W * 0.37, gy - 8 * sc, "PRIVATE COMPOUND"]);
+    if (moon && yr >= S.moon) L.push([moon.x + moon.r * 0.4, moon.y + moon.r * 0.6, "LUNAR BASE"]);
+    if (S.robots > 0) L.push([WORLD.rb[0].x * W, gy - 17 * sc, "ROBOTS ×" + S.robots]);
+    if (S.solar > 0) L.push([W * 0.03, gy - 8 * sc, "SOLAR ×" + S.solar]);
+    L.push([WORLD.dc[0].x * W, gy - 14 * sc, "DATA CENTRES ×" + S.dc]);
+    ctx.font = (small ? "8px " : "9px ") + mono; ctx.lineWidth = 0.8;
+    var vx0 = vis ? vis[0] : 0, vx1 = vis ? vis[1] : W;
+    L = L.filter(function (l) { return l[0] > vx0 + 4 && l[0] < vx1 - 4; });
+    L.slice(0, small ? 2 : 3).forEach(function (l, i) {
+      var tw = ctx.measureText(l[2]).width, ty = Math.max(12, Math.min(l[1] - 18, gy * 0.42) - i * 14);
+      var tx = clamp(l[0] + 12, vx0 + 6, vx1 - tw - 10);
+      ctx.strokeStyle = K; ln(l[0], l[1], tx - 2, ty - 3); ci(l[0], l[1], 1.6); ctx.fillStyle = K; ctx.fill();
+      ctx.fillStyle = "#fff"; ctx.fillRect(tx - 3, ty - 9, tw + 6, 12); ctx.fillStyle = K; ctx.fillText(l[2], tx, ty);
+    });
+    ctx.lineWidth = 1;
+    // Title block, on the postcard only
+    if (!small && H > 200) {
+      var t2 = "THE AI CENTURY · SHEET " + Math.floor(yr) + " · " + PATHS[p].name.toUpperCase();
+      ctx.font = "8.5px " + mono; var bw = ctx.measureText(t2).width + 12, bh = 15, bx = W - bw - 8, by = H - bh - 6;
+      ctx.fillStyle = "#fff"; ctx.fillRect(bx, by, bw, bh); ctx.strokeStyle = K; ctx.strokeRect(bx + 0.5, by + 0.5, bw, bh);
+      ctx.fillStyle = K; ctx.fillText(t2, bx + 6, by + 10.5);
+    }
+  }
+
+  var sky = document.getElementById("sky"), skyCtx = sky.getContext("2d"), sceneYear = Y0, skyW = 0, skyH = 0;
+  function sizeCanvas(cv2, ctx) {
+    var r = cv2.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv2.width = Math.round(r.width * dpr); cv2.height = Math.round(r.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return [r.width, r.height];
+  }
+  function sizeSky() { var s = sizeCanvas(sky, skyCtx); skyW = s[0]; skyH = s[1]; }
+  function paintSky(t) {
+    if (!skyW) return;
+    sceneYear = targetYear;
+    drawScene(skyCtx, skyW, skyH, sceneYear, segAt(Math.floor(sceneYear)).p, t, true);
+  }
+
+  /* ---------- Postcard ---------- */
+  var pcCanvas = document.getElementById("pcCanvas"), pcCtx = pcCanvas.getContext("2d");
+  function routeText() {
+    return R.nodes.map(function (n) { return n.ref + ": " + chosenOpt(n.key)[2]; }).join(" → ") + " → " + PATHS[finalPath()].name + " (about " + pct(routeChance()) + " likely)";
+  }
+  function pct(x) { var v = x * 100; return (v >= 10 ? Math.round(v) : v >= 1 ? Math.round(v * 10) / 10 : Math.round(v * 100) / 100) + "%"; }
+  function drawPostcard() {
+    var fp = finalPath(), pc = document.getElementById("pc"), has = function (ref, v) { return R.nodes.some(function (n) { return n.ref === ref && n.v === v; }); };
+    pc.style.setProperty("--pc", cv(fp));
+    document.getElementById("pcTitle").textContent = PATHS[fp].name;
+    var pre = "";
+    if (has("G", "jump")) pre = "The second jump came about ten years late. ";
+    if (has("E", "reform")) pre += "The reform came late, but it came. ";
+    if (has("D", "fails")) pre += "The deal broke, and the world split. ";
+    if (has("D", "lockin")) pre += "The crisis rules locked in a few labs. ";
+    document.getElementById("pcText").textContent = pre + ENDINGS[fp];
+    document.getElementById("pcRoute").innerHTML = R.nodes.map(function (n) { var o = chosenOpt(n.key); return '<span><b style="font-family: var(--f-mono); font-size: 12px; color: var(--muted)">' + n.ref + '</b> ' + esc(o[2]) + ' <span style="color: var(--muted)">(' + PROB[n.ref][n.v] + '%)</span></span>'; }).join("") +
+      '<span><b>Chance of this whole route:</b> about ' + pct(routeChance()) + '. This is a rough estimate.</span>';
+    var s = sizeCanvas(pcCanvas, pcCtx);
+    drawScene(pcCtx, s[0], s[1], 2126, fp);
+    document.getElementById("copyMsg").textContent = "";
+  }
+  document.getElementById("copyRoute").addEventListener("click", function () {
+    var txt = "My path on The AI Century: " + routeText(), msg = document.getElementById("copyMsg");
+    try {
+      navigator.clipboard.writeText(txt).then(function () { msg.textContent = "Copied: " + txt; }, function () { msg.textContent = txt; });
+    } catch (e) { msg.textContent = txt; }
+  });
+  document.getElementById("again").addEventListener("click", function () {
+    var x = document.querySelector('#rows .xroad[data-ref="A"]'); if (x) scrollToEl(x);
+  });
+
+  // One large detail drawing for each crossroads choice: only the thing that the decision changes.
+  function drawDetail(ctx, W, H, kind, text) {
+    var K = "#1a1a1a", u = Math.min(W / 320, H / 200) * 1.15, gy = Math.round(H * 0.84), mono = '"SFMono-Regular", Consolas, Menlo, monospace', x, y, tag = null;
+    function ln(a, b, c, d) { ctx.beginPath(); ctx.moveTo(a, b); ctx.lineTo(c, d); ctx.stroke(); }
+    function ci(cx, cy, r) { ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); }
+    function box(bx, by, bw, bh) { ctx.fillStyle = "#fff"; ctx.fillRect(bx, by, bw, bh); ctx.strokeRect(bx + 0.5, by + 0.5, bw, bh); }
+    function dash(on) { ctx.setLineDash(on ? [3 * u, 3 * u] : []); }
+    ctx.clearRect(0, 0, W, H); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H); ctx.lineWidth = 1;
+    for (x = 0; x <= W; x += 10) { ctx.strokeStyle = x % 50 ? "rgba(0,0,0,.035)" : "rgba(0,0,0,.07)"; ln(x + 0.5, 0, x + 0.5, H); }
+    for (y = 0; y <= H; y += 10) { ctx.strokeStyle = y % 50 ? "rgba(0,0,0,.035)" : "rgba(0,0,0,.07)"; ln(0, y + 0.5, W, y + 0.5); }
+    ctx.strokeStyle = K; ctx.fillStyle = K; ctx.lineWidth = 1.3; ctx.lineCap = "round"; ctx.lineJoin = "round";
+
+    function house(hx, w, lit) {
+      var h = w * 0.62; box(hx, gy - h, w, h);
+      ctx.beginPath(); ctx.moveTo(hx - 3 * u, gy - h); ctx.lineTo(hx + w / 2, gy - h - w * 0.42); ctx.lineTo(hx + w + 3 * u, gy - h); ctx.closePath(); ctx.fillStyle = "#fff"; ctx.fill(); ctx.stroke();
+      ctx.strokeRect(hx + w * 0.41, gy - h * 0.55, w * 0.18, h * 0.55);
+      var ws = w * 0.17;
+      [hx + w * 0.1, hx + w * 0.73].forEach(function (wx) {
+        var wy = gy - h * 0.78;
+        if (lit) { ctx.strokeRect(wx, wy, ws, ws); ln(wx + ws / 2, wy, wx + ws / 2, wy + ws); ln(wx, wy + ws / 2, wx + ws, wy + ws / 2); }
+        else { ctx.fillStyle = K; ctx.fillRect(wx, wy, ws, ws); }
+      });
+      return { peakX: hx + w / 2, peakY: gy - h - w * 0.42 };
+    }
+    function dc(x0, w, h) {
+      box(x0, gy - h, w, h);
+      for (var fx = x0 + w * 0.15; fx < x0 + w - 6 * u; fx += w * 0.24) { ctx.beginPath(); ctx.arc(fx, gy - h, 5 * u, Math.PI, 0); ctx.fillStyle = "#fff"; ctx.fill(); ctx.stroke(); }
+      for (var ry = gy - h + 9 * u; ry < gy - 5 * u; ry += 7 * u) ln(x0 + 7 * u, ry, x0 + w - 7 * u, ry);
+    }
+    function crane(mx, top, jx0, jx1) {
+      var mw = 8 * u;
+      ln(mx - mw / 2, gy, mx - mw / 2, top); ln(mx + mw / 2, gy, mx + mw / 2, top);
+      for (var cy = gy; cy > top + mw; cy -= mw) ln(mx - mw / 2, cy, mx + mw / 2, cy - mw);
+      ctx.strokeRect(jx0, top - 5 * u, jx1 - jx0, 5 * u);
+      for (var jx = jx0; jx < jx1 - 4 * u; jx += 8 * u) ln(jx, top, jx + 4 * u, top - 5 * u);
+      ln(mx, top - 5 * u, mx, top - 16 * u); ln(mx, top - 16 * u, jx0 + 4 * u, top - 5 * u); ln(mx, top - 16 * u, jx1 - 4 * u, top - 5 * u);
+      box(jx1 - 15 * u, top - 5 * u, 11 * u, 9 * u);
+    }
+    function pylon(px, top, base) {
+      function lx(yy, side) { var t = (gy - yy) / (gy - top); return px + side * (base / 2 * (1 - t) + 5 * u * t); }
+      ln(lx(gy, -1), gy, lx(top, -1), top); ln(lx(gy, 1), gy, lx(top, 1), top);
+      for (var k = 0; k < 6; k++) { var y1 = gy - (gy - top) * k / 6, y2 = gy - (gy - top) * (k + 1) / 6; ln(lx(y1, -1), y1, lx(y2, 1), y2); ln(lx(y1, 1), y1, lx(y2, -1), y2); ln(lx(y2, -1), y2, lx(y2, 1), y2); }
+      [[top + 10 * u, base * 0.95], [top + 26 * u, base * 0.75]].forEach(function (a) { ln(px - a[1], a[0], px + a[1], a[0]); ln(px - a[1], a[0], px - a[1], a[0] + 6 * u); ln(px + a[1], a[0], px + a[1], a[0] + 6 * u); });
+      ln(px, top, px, top - 9 * u);
+    }
+    function wallBlock(wx, top, ww) { box(wx - ww / 2, top, ww, gy - top); for (var by = top + 9 * u; by < gy; by += 9 * u) ln(wx - ww / 2, by, wx + ww / 2, by); }
+    function tower(tx, top, tw) { box(tx - tw / 2, top, tw, gy - top); ln(tx, top, tx, top - 16 * u); for (var wy = top + 9 * u; wy < gy - 10 * u; wy += 11 * u) ctx.strokeRect(tx - tw / 2 + 5 * u, wy, tw - 10 * u, 3.5 * u); }
+    function watch(wx, top) {
+      box(wx - 12 * u, top - 15 * u, 24 * u, 15 * u);
+      ctx.beginPath(); ctx.moveTo(wx - 15 * u, top - 15 * u); ctx.lineTo(wx, top - 24 * u); ctx.lineTo(wx + 15 * u, top - 15 * u); ctx.closePath(); ctx.fillStyle = "#fff"; ctx.fill(); ctx.stroke();
+      ctx.fillStyle = K; ctx.fillRect(wx - 7 * u, top - 11 * u, 14 * u, 3.5 * u);
+    }
+    function stick(px) { var h = 18 * u; ci(px, gy - h, 2.8 * u); ctx.stroke(); ln(px, gy - h + 2.8 * u, px, gy - 7 * u); ln(px, gy - 7 * u, px - 3 * u, gy); ln(px, gy - 7 * u, px + 3 * u, gy); ln(px - 3.5 * u, gy - h + 8 * u, px + 3.5 * u, gy - h + 8 * u); }
+    function robot(rx) { var s = u * 1.4; box(rx - 4 * s, gy - 15 * s, 8 * s, 9 * s); box(rx - 3 * s, gy - 21 * s, 6 * s, 5 * s); ctx.fillStyle = K; ctx.fillRect(rx - 1.5 * s, gy - 19.5 * s, 3 * s, 1.5 * s); ln(rx - 2 * s, gy - 6 * s, rx - 2.5 * s, gy); ln(rx + 2 * s, gy - 6 * s, rx + 2.5 * s, gy); }
+    function tree(tx, r) { ln(tx, gy, tx, gy - r * 1.6); ci(tx, gy - r * 2.5, r); ctx.fillStyle = "#fff"; ctx.fill(); ctx.stroke(); }
+    function fence(x0, x1, h) { for (var fx = x0; fx <= x1 + 0.1; fx += 7 * u) ln(fx, gy, fx, gy - h); ln(x0, gy - h * 0.75, x1, gy - h * 0.75); ln(x0, gy - h * 0.3, x1, gy - h * 0.3); }
+    function spikes(x0, x1, h) { box(x0, gy - h, x1 - x0, h); for (var sx = x0; sx < x1 - 1; sx += 6 * u) { ctx.beginPath(); ctx.moveTo(sx, gy - h); ctx.lineTo(sx + 3 * u, gy - h - 6 * u); ctx.lineTo(sx + 6 * u, gy - h); ctx.stroke(); } }
+    function gate(x0, x1, h, open) {
+      box(x0 - 3 * u, gy - h - 6 * u, 6 * u, h + 6 * u); box(x1 - 3 * u, gy - h - 6 * u, 6 * u, h + 6 * u);
+      if (!open) { ln(x0, gy - h, x1, gy - h); ln(x0, gy - h * 0.15, x1, gy - h * 0.15); for (var bx = x0 + 6 * u; bx < x1; bx += 6 * u) ln(bx, gy - h, bx, gy - h * 0.15); }
+      else {
+        var lw = (x1 - x0) * 0.42;
+        ctx.beginPath(); ctx.moveTo(x0, gy - h); ctx.lineTo(x0 - lw * 0.55, gy - h + 6 * u); ctx.lineTo(x0 - lw * 0.55, gy - 2 * u); ctx.lineTo(x0, gy - h * 0.15); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x1, gy - h); ctx.lineTo(x1 + lw * 0.55, gy - h + 6 * u); ctx.lineTo(x1 + lw * 0.55, gy - 2 * u); ctx.lineTo(x1, gy - h * 0.15); ctx.stroke();
+      }
+    }
+    function smokeAt(sx, sy) { dash(true); ci(sx, sy, 8 * u); ctx.stroke(); ci(sx + 7 * u, sy - 14 * u, 6 * u); ctx.stroke(); ci(sx + 2 * u, sy - 26 * u, 4 * u); ctx.stroke(); dash(false); }
+
+    switch (kind) {
+      case "dcBuild":
+        dc(W * 0.1, W * 0.4, H * 0.32);
+        dash(true); ctx.strokeRect(W * 0.5, gy - H * 0.32, W * 0.14, H * 0.32); dash(false);
+        crane(W * 0.8, H * 0.2, W * 0.48, W * 0.94);
+        ln(W * 0.57, H * 0.2, W * 0.57, H * 0.36); box(W * 0.57 - 9 * u, H * 0.36, 18 * u, 11 * u);
+        tag = [W * 0.57, H * 0.36 + 11 * u]; break;
+      case "dcPaused":
+        dc(W * 0.1, W * 0.24, H * 0.32);
+        var f0 = W * 0.34, f1 = W * 0.62, ft = gy - H * 0.32;
+        dash(true); ctx.strokeRect(f0, ft, f1 - f0, H * 0.32); for (x = f0; x <= f1 + 0.1; x += (f1 - f0) / 4) ln(x, gy, x, ft); ln(f0, ft + H * 0.16, f1, ft + H * 0.16); dash(false);
+        crane(W * 0.8, H * 0.2, W * 0.48, W * 0.94); ln(W * 0.6, H * 0.2, W * 0.6, H * 0.28);
+        box(W * 0.68 - 15 * u, gy - 24 * u, 30 * u, 12 * u); ln(W * 0.68, gy - 12 * u, W * 0.68, gy); ln(W * 0.68 - 10 * u, gy - 18 * u, W * 0.68 + 10 * u, gy - 18 * u);
+        tag = [(f0 + f1) / 2, ft + H * 0.08]; break;
+      case "gridOn": {
+        var px = W * 0.4, top = H * 0.16, base = W * 0.13;
+        pylon(px, top, base);
+        var hp = house(W * 0.72, W * 0.18, true);
+        ctx.lineWidth = 1;
+        [[top + 16 * u, base * 0.95], [top + 32 * u, base * 0.75]].forEach(function (a, i) {
+          ctx.beginPath(); ctx.moveTo(px - a[1], a[0]); ctx.quadraticCurveTo(px * 0.45, a[0] + 22 * u, 0, a[0] + 6 * u); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(px + a[1], a[0]); ctx.quadraticCurveTo((px + hp.peakX) / 2, a[0] + 26 * u + i * 6 * u, hp.peakX, hp.peakY); ctx.stroke();
+        });
+        ctx.lineWidth = 1.3; tag = [W * 0.72 + W * 0.18 * 0.82, gy - W * 0.18 * 0.62 * 0.7]; break;
+      }
+      case "gridOff": {
+        var qx = W * 0.4, qt = H * 0.16, qb = W * 0.13, mid = gy - (gy - qt) * 0.5;
+        ctx.save(); ctx.beginPath(); ctx.rect(0, mid, W, H); ctx.clip(); pylon(qx, qt, qb); ctx.restore();
+        var pvx = qx + qb * 0.25, pvy = mid;
+        ctx.save(); ctx.translate(pvx, pvy); ctx.rotate(0.62); ctx.translate(-pvx, -pvy); ctx.beginPath(); ctx.rect(0, -H, W, mid + H); ctx.clip(); pylon(qx, qt, qb); ctx.restore();
+        house(W * 0.72, W * 0.18, false);
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(0, qt + 24 * u); ctx.quadraticCurveTo(W * 0.15, gy - 4 * u, W * 0.27, gy); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(W * 0.62, gy); ctx.quadraticCurveTo(W * 0.66, gy - 30 * u, W * 0.77, gy - W * 0.18 * 0.62 - W * 0.18 * 0.42); ctx.stroke();
+        ctx.lineWidth = 1.3; smokeAt(qx + qb * 0.2, mid - 14 * u);
+        tag = [W * 0.72 + W * 0.18 * 0.82, gy - W * 0.18 * 0.62 * 0.7]; break;
+      }
+      case "house": {
+        house(W * 0.3, W * 0.25, true);
+        fence(W * 0.08, W * 0.26, 13 * u);
+        tree(W * 0.64, 11 * u); robot(W * 0.74);
+        var mx = W * 0.88; ln(mx, gy, mx, gy - 24 * u); box(mx - 9 * u, gy - 34 * u, 18 * u, 11 * u);
+        box(mx - 5 * u, gy - 41 * u, 10 * u, 7 * u); ln(mx - 5 * u, gy - 41 * u, mx, gy - 37.5 * u); ln(mx, gy - 37.5 * u, mx + 5 * u, gy - 41 * u);
+        tag = [mx, gy - 41 * u]; break;
+      }
+      case "tower":
+        tower(W * 0.5, H * 0.1, W * 0.17); spikes(W * 0.22, W * 0.78, 17 * u);
+        ln(W * 0.86, gy, W * 0.86, gy - 54 * u); ctx.save(); ctx.translate(W * 0.86, gy - 54 * u); ctx.rotate(0.35); box(-14 * u, -5 * u, 16 * u, 9 * u); ctx.strokeRect(-19 * u, -3 * u, 5 * u, 5 * u); ctx.restore();
+        stick(W * 0.94); tag = [W * 0.5, H * 0.32]; break;
+      case "border": case "borderClosed":
+        wallBlock(W * 0.5, H * 0.3, 15 * u); watch(W * 0.5, H * 0.3);
+        house(W * 0.12, W * 0.16, true); house(W * 0.72, W * 0.16, true); stick(W * 0.36); stick(W * 0.64);
+        if (kind === "borderClosed") { box(W * 0.5 + 8 * u, gy - 22 * u, 4 * u, 22 * u); ctx.strokeRect(W * 0.5 + 12 * u, gy - 20 * u, W * 0.1, 4 * u); for (x = W * 0.5 + 16 * u; x < W * 0.6 + 12 * u; x += 8 * u) { ctx.fillStyle = K; ctx.fillRect(x, gy - 20 * u, 4 * u, 4 * u); } }
+        tag = [W * 0.5, H * 0.48]; break;
+      case "openRoute":
+        house(W * 0.1, W * 0.16, true); house(W * 0.74, W * 0.16, true);
+        [[W * 0.42, 0.5], [W * 0.58, 0.42]].forEach(function (s) {
+          var top2 = gy - (gy - H * 0.3) * s[1];
+          ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.moveTo(s[0] - 7 * u, gy); ctx.lineTo(s[0] - 7 * u, top2); ctx.lineTo(s[0] - 2 * u, top2 - 5 * u); ctx.lineTo(s[0] + 2 * u, top2 + 2 * u); ctx.lineTo(s[0] + 7 * u, top2 - 3 * u); ctx.lineTo(s[0] + 7 * u, gy); ctx.closePath(); ctx.fill(); ctx.stroke();
+        });
+        box(W * 0.46, gy - 5 * u, 7 * u, 5 * u); box(W * 0.52, gy - 4 * u, 5 * u, 4 * u);
+        stick(W * 0.47); stick(W * 0.53);
+        dash(true); ln(W * 0.3, gy - 3 * u, W * 0.7, gy - 3 * u); dash(false);
+        tag = [W * 0.5, gy - 24 * u]; break;
+      case "inspected": {
+        dc(W * 0.22, W * 0.42, H * 0.3); fence(W * 0.1, W * 0.74, 26 * u);
+        var sx2 = W * 0.84, sy2 = gy - 36 * u; ci(sx2, sy2, 14 * u); ctx.fillStyle = "#fff"; ctx.fill(); ctx.stroke(); ci(sx2, sy2, 10 * u); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(sx2 - 5 * u, sy2); ctx.lineTo(sx2 - 1 * u, sy2 + 4 * u); ctx.lineTo(sx2 + 6 * u, sy2 - 5 * u); ctx.stroke(); ln(sx2, sy2 + 14 * u, sx2, gy);
+        tag = [sx2, sy2 - 14 * u]; break;
+      }
+      case "treatyEnd":
+        dc(W * 0.16, W * 0.34, H * 0.3); fence(W * 0.06, W * 0.4, 26 * u);
+        dash(true); ln(W * 0.46, gy, W * 0.5, gy - 22 * u); ln(W * 0.53, gy, W * 0.57, gy - 18 * u); dash(false);
+        wallBlock(W * 0.8, gy - H * 0.22, 15 * u); dash(true); ctx.strokeRect(W * 0.8 - 7.5 * u, H * 0.26, 15 * u, gy - H * 0.22 - H * 0.26); dash(false);
+        tag = [W * 0.5, gy - 20 * u]; break;
+      case "locked":
+        tower(W * 0.5, H * 0.1, W * 0.15); gate(W * 0.3, W * 0.7, 40 * u, false);
+        box(W * 0.5 - 7 * u, gy - 26 * u, 14 * u, 11 * u); ctx.beginPath(); ctx.arc(W * 0.5, gy - 26 * u, 5 * u, Math.PI, 0); ctx.stroke(); ci(W * 0.5, gy - 21 * u, 1.5 * u); ctx.fillStyle = K; ctx.fill();
+        tag = [W * 0.5, gy - 30 * u]; break;
+      case "review": {
+        dc(W * 0.46, W * 0.44, H * 0.38);
+        box(W * 0.06, gy - 20 * u, W * 0.24, 4 * u); ln(W * 0.08, gy - 16 * u, W * 0.08, gy); ln(W * 0.28, gy - 16 * u, W * 0.28, gy);
+        for (var pk = 0; pk < 9; pk++) box(W * 0.19, gy - 25 * u - pk * 5 * u, 24 * u, 4.5 * u);
+        stick(W * 0.13);
+        dash(true); ln(W * 0.46, gy - H * 0.22, W * 0.19 + 25 * u, gy - 60 * u); ln(W * 0.46, gy - H * 0.3, W * 0.19 + 25 * u, gy - 66 * u); dash(false);
+        tag = [W * 0.19 + 12 * u, gy - 25 * u - 8 * 5 * u]; break;
+      }
+      case "reform":
+        tower(W * 0.72, H * 0.18, W * 0.12); gate(W * 0.56, W * 0.88, 36 * u, true);
+        var bbx = W * 0.36; box(bbx - 15 * u, gy - 26 * u, 30 * u, 26 * u); ctx.fillStyle = K; ctx.fillRect(bbx - 7 * u, gy - 26 * u - 1, 14 * u, 2.5 * u);
+        box(bbx - 5 * u, gy - 36 * u, 10 * u, 12 * u); ln(bbx - 2.5 * u, gy - 32 * u, bbx + 2.5 * u, gy - 32 * u); ln(bbx - 2.5 * u, gy - 29 * u, bbx + 1 * u, gy - 29 * u);
+        stick(W * 0.14); stick(W * 0.21);
+        tag = [bbx, gy - 36 * u]; break;
+    }
+    if (text && tag) {
+      ctx.font = Math.round(9.5 * Math.max(1, u)) + "px " + mono; ctx.lineWidth = 0.9;
+      var tw = ctx.measureText(text).width, tx = clamp(tag[0] + 14, 8, W - tw - 12), ty = clamp(tag[1] - 26 * u, 46, gy - 12);
+      ctx.strokeStyle = K; ln(tag[0], tag[1], tx - 2, ty - 3); ci(tag[0], tag[1], 1.8); ctx.fillStyle = K; ctx.fill();
+      ctx.fillStyle = "#fff"; ctx.fillRect(tx - 4, ty - 10, tw + 8, 14); ctx.strokeRect(tx - 3.5, ty - 9.5, tw + 7, 13); ctx.fillStyle = K; ctx.fillText(text, tx, ty);
+    }
+    ctx.lineWidth = 1.6; ctx.strokeStyle = K; ln(0, gy + 0.5, W, gy + 0.5);
+  }
+
+  function drawPreviews() {
+    document.querySelectorAll("#rows .xp-cv").forEach(function (cv2) {
+      var c2 = cv2.getContext("2d"), sz = sizeCanvas(cv2, c2);
+      if (sz[0]) drawDetail(c2, sz[0], sz[1], cv2.dataset.k, cv2.dataset.l);
+    });
+  }
+
+  /* ---------- Render ---------- */
+  var raf = 0;
+  function redraw() { cancelAnimationFrame(raf); raf = requestAnimationFrame(function () { drawLane(); sizeSky(); drawPreviews(); drawPostcard(); paintSky(0); }); }
+  function renderAll(keepRef) {
+    var before = null;
+    if (keepRef) { var c = document.querySelector('#rows .xroad[data-ref="' + keepRef + '"]'); if (c) before = c.getBoundingClientRect().top; }
+    R = resolve(state.choices);
+    growRef = keepRef && !REDUCED ? keepRef : null;
+    drawRows(); drawPreviews(); drawLane(); drawPostcard();
+    growRef = null;
+    if (before != null) {
+      var n = document.querySelector('#rows .xroad[data-ref="' + keepRef + '"]');
+      if (n) { window.scrollBy(0, n.getBoundingClientRect().top - before); measure(); }
+      var btn = document.getElementById("opt-" + keepRef + "-" + state.choices[keepRef]);
+      if (btn) btn.focus({ preventScroll: true });
+    }
+  }
+
+  readColors();
+  drawJumps();
+  sizeSky();
+  renderAll(null);
+  paintSky(0);
+  if (window.ResizeObserver) new ResizeObserver(redraw).observe(document.getElementById("rows"));
+  window.addEventListener("resize", redraw);
+  document.getElementById("rows").addEventListener("toggle", redraw, true);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(redraw);
+})();
+</script>
+
+</body>
+</html>
