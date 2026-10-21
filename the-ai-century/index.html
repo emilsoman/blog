@@ -318,7 +318,6 @@ h1 { font-size: 30px; }
 @media (max-width: 640px) {
   .pc-back { grid-template-columns: 1fr; }
   .pc-msg { border-right: 0; padding-right: 0; border-bottom: 1px solid #ddd6c6; padding-bottom: 16px; }
-  .pc-mark { right: 90px; top: 0; }
   .xroad h3, .chapter h3 { font-size: 23px; }
   .o-news .cols { columns: 1; }
 }
@@ -357,8 +356,7 @@ footer ul { margin: 0; padding-left: 20px; display: grid; gap: 3px; }
           <div class="pc-stamp" id="pcStamp"><div>2126</div></div>
           <div class="pc-mark">EARTH<br>2126<br>A.I. POST</div>
           <div class="pc-lines" id="pcRoute"></div>
-          <div class="pc-actions"><button type="button" class="pbtn" id="copyRoute">Copy my route</button><button type="button" class="pbtn ghost2" id="again">Choose again</button></div>
-          <p class="hint" id="copyMsg" aria-live="polite"></p>
+          <div class="pc-actions"><button type="button" class="pbtn ghost2" id="again">Choose again</button></div>
         </div>
       </div>
     </div>
@@ -1308,9 +1306,6 @@ footer ul { margin: 0; padding-left: 20px; display: grid; gap: 3px; }
 
   /* ---------- Postcard ---------- */
   var pcCanvas = document.getElementById("pcCanvas"), pcCtx = pcCanvas.getContext("2d");
-  function routeText() {
-    return R.nodes.map(function (n) { return n.ref + ": " + chosenOpt(n.key)[2]; }).join(" → ") + " → " + PATHS[finalPath()].name + " (about " + pct(routeChance()) + " likely)";
-  }
   function pct(x) { var v = x * 100; return (v >= 10 ? Math.round(v) : v >= 1 ? Math.round(v * 10) / 10 : Math.round(v * 100) / 100) + "%"; }
   function drawPostcard() {
     var fp = finalPath(), pc = document.getElementById("pc"), has = function (ref, v) { return R.nodes.some(function (n) { return n.ref === ref && n.v === v; }); };
@@ -1326,14 +1321,7 @@ footer ul { margin: 0; padding-left: 20px; display: grid; gap: 3px; }
       '<span><b>Chance of this whole route:</b> about ' + pct(routeChance()) + '. This is a rough estimate.</span>';
     var s = sizeCanvas(pcCanvas, pcCtx);
     drawScene(pcCtx, s[0], s[1], 2126, fp);
-    document.getElementById("copyMsg").textContent = "";
   }
-  document.getElementById("copyRoute").addEventListener("click", function () {
-    var txt = "My path on The AI Century: " + routeText(), msg = document.getElementById("copyMsg");
-    try {
-      navigator.clipboard.writeText(txt).then(function () { msg.textContent = "Copied: " + txt; }, function () { msg.textContent = txt; });
-    } catch (e) { msg.textContent = txt; }
-  });
   document.getElementById("again").addEventListener("click", function () {
     var x = document.querySelector('#rows .xroad[data-ref="A"]'); if (x) scrollToEl(x);
   });
