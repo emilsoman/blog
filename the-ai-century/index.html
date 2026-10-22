@@ -312,6 +312,58 @@ h1 { font-size: 30px; }
   font: 700 28px/1.15 "Marker Felt", "Chalkboard SE", "Comic Sans MS", cursive; color: #1d1d1d; text-transform: uppercase; box-shadow: var(--shadow); }
 .o-sign .stick { width: 12px; height: 64px; background: #a07b48; }
 
+/* Opening: a TV that switches channels between voices. Dark by design. */
+.tv { margin-inline: calc(50% - 50vw); margin-top: calc(-60px - env(safe-area-inset-top, 0px)); position: relative; background: #0a0b0c; }
+.tv-stick { position: sticky; top: 0; height: 100vh; height: 100svh; display: grid; place-items: center; padding: 3.5vmin; }
+.tv-screen { position: relative; width: min(1120px, 100%); height: min(700px, 100%); border-radius: 30px / 24px; overflow: hidden;
+  background: radial-gradient(ellipse at 50% 45%, #2b2e30 0%, #151718 62%, #060707 100%);
+  box-shadow: inset 0 0 140px rgba(0,0,0,.92), 0 0 0 10px #191a1b, 0 0 0 11px #2d2e2f, 0 30px 80px rgba(0,0,0,.6); }
+#tvGrain { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .09; mix-blend-mode: screen; pointer-events: none; z-index: 1; }
+.tv-scan { position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0,0,0,.2) 0 1px, transparent 1px 3px); }
+.tv-scan::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55) 100%); }
+.tv-hud { position: absolute; top: 18px; left: 26px; right: 26px; display: flex; justify-content: space-between; font: 500 13px/1 var(--f-mono); letter-spacing: .08em; color: rgba(235,235,230,.7); pointer-events: none; z-index: 2; }
+.tv-card { position: absolute; inset: 0; display: grid; align-content: center; gap: 18px; padding: 9% 9% 10%; color: #f1f1ec; opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s .35s; text-shadow: 0 0 10px rgba(255,255,255,.22); }
+.tv-card.on { opacity: 1; visibility: visible; transition: opacity .35s ease; }
+.tv-card h1 { font-size: clamp(40px, 8vw, 92px); letter-spacing: -.02em; color: #f6f6f1; }
+.tv-card .tv-by { font: 500 clamp(15px, 1.8vw, 19px)/1.4 var(--f-mono); color: rgba(235,235,230,.75); }
+.tv-card .tv-by a { color: rgba(235,235,230,.9); }
+.tv-card .tv-lede { font-size: clamp(18px, 2.4vw, 26px); line-height: 1.4; max-width: 30ch; color: #e6e6e0; }
+.tv-q { font-weight: 600; font-size: clamp(24px, 4vw, 46px); line-height: 1.2; letter-spacing: -.01em; max-width: 26ch; text-wrap: balance; }
+.tv-who { font: 500 clamp(13px, 1.5vw, 16px)/1.5 var(--f-mono); color: rgba(235,235,230,.78); letter-spacing: .03em; }
+.tv-who b { color: #f6f6f1; font-weight: 600; }
+.tv-who a { color: rgba(235,235,230,.9); }
+.tv-cue { position: absolute; left: 0; right: 0; bottom: 18px; text-align: center; font: 500 12px/1 var(--f-mono); letter-spacing: .14em; color: rgba(235,235,230,.55); pointer-events: none; z-index: 2; }
+.tv-screen.glitch .tv-card.on { animation: tvjolt .22s steps(3) 1; }
+@keyframes tvjolt { 0% { transform: translateX(-6px) skewX(4deg); filter: brightness(1.8); } 50% { transform: translateX(5px); filter: brightness(.6); } 100% { transform: none; filter: none; } }
+
+/* The promise and the stretch */
+.promise { display: grid; gap: 10px; padding-top: 56px; }
+.kicker { font: 500 13px/1.4 var(--f-mono); letter-spacing: .08em; color: var(--muted); text-transform: uppercase; }
+.promise h2, .gaps h2, .tl-head h2 { font-size: 30px; }
+.promise p, .tl-head p, .gaps > p { font-size: 17px; line-height: 1.6; max-width: 62ch; }
+.promise .src { font-size: 14px; color: var(--muted); }
+.stretch { position: relative; }
+.st-stick { position: sticky; top: 0; height: 100vh; height: 100svh; display: grid; grid-template-rows: auto 1fr; gap: 6px; padding-block: 28px 18px; }
+.st-cap { font: 600 19px/1.35 var(--f-body); min-height: 3.6em; max-width: 46ch; }
+.st-cap span { display: block; font: 500 13px/1.5 var(--f-mono); color: var(--muted); }
+#stSvg { width: 100%; height: 100%; overflow: visible; }
+.st-axis { stroke: #1a1a1a; stroke-width: 1.5; }
+.st-tick { stroke: rgba(0,0,0,.12); stroke-width: 1; }
+.st-yr { font: 500 11px var(--f-mono); fill: var(--muted); text-anchor: middle; }
+.st-head { font: 600 12px var(--f-mono); letter-spacing: .06em; fill: var(--ink); }
+.st-lab { font: 600 13px var(--f-body); fill: var(--ink); }
+.st-sub { font: 400 11.5px var(--f-mono); fill: var(--muted); }
+.st-link { fill: none; stroke: #1a1a1a; stroke-width: 1; stroke-dasharray: 3 3; }
+.gaps { display: grid; gap: 14px; padding-top: 24px; }
+.gap { display: grid; gap: 6px; border-top: 2px solid #1a1a1a; padding-top: 12px; }
+.gap h3 { font-size: 21px; }
+.gap .said { font-size: 15px; color: var(--muted); }
+.gap ul { margin: 2px 0 0; padding-left: 20px; display: grid; gap: 2px; font-size: 16px; line-height: 1.55; }
+.gap .est { font: 600 15px/1.5 var(--f-mono); }
+.tl-head { display: grid; gap: 10px; padding-top: 40px; }
+@media (max-width: 640px) { .tv-card { padding: 14% 8% 12%; } .st-cap { font-size: 16px; min-height: 6.4em; } }
+@media (prefers-reduced-motion: reduce) { .tv-screen.glitch .tv-card.on { animation: none; } }
+
 /* Lane */
 .ink { stroke: none; }
 .cn { stroke: #dfe3e6; stroke-width: 1; }
@@ -359,9 +411,43 @@ footer ul { margin: 0; padding-left: 20px; display: grid; gap: 3px; }
 </style>
 
 <div class="wrap">
-  <header>
-    <h1>The AI Century</h1>
-    <div id="sub-header">A scenario timeline, 2026 to 2126 · by <a href="https://emilsoman.com">Emil Soman</a></div>
+  <section class="tv" id="tv" aria-label="What leading voices in AI say about the future">
+    <div class="tv-stick">
+      <div class="tv-screen" id="tvScreen">
+        <div class="tv-hud" aria-hidden="true"><span id="tvCh">CH 01</span><span id="tvDate">2026</span></div>
+        <div id="tvCards"></div>
+        <canvas id="tvGrain" aria-hidden="true"></canvas>
+        <div class="tv-scan" aria-hidden="true"></div>
+        <div class="tv-cue" id="tvCue" aria-hidden="true">SCROLL ↓</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="promise" aria-labelledby="promiseH">
+    <span class="kicker">The promise</span>
+    <h2 id="promiseH">The future, as Elon Musk tells it</h2>
+    <p>In interviews from 2024 to 2026, Musk described a fast road. AI becomes smarter than any human by 2027. More than a billion humanoid robots work within ten years. Work becomes optional within 10 to 20 years, and money stops being relevant.</p>
+    <p class="src" id="promiseSrc"></p>
+  </section>
+
+  <section class="stretch" id="stretch" aria-label="Musk's dates compared with what has to happen first">
+    <div class="st-stick">
+      <p class="st-cap" id="stCap"></p>
+      <svg id="stSvg" role="img" aria-label="Two timelines. On the left, Musk's dates, all within ten years. On the right, the dates that the evidence supports, spread over several decades."></svg>
+    </div>
+  </section>
+
+  <section class="gaps" aria-labelledby="gapsH">
+    <span class="kicker">What has to happen first</span>
+    <h2 id="gapsH">Each promise needs other things to happen first</h2>
+    <p>Most of the promises are possible. The problem is the order and the speed. Physical things, laws and money move slower than software.</p>
+    <div id="gapList" style="display:grid;gap:18px"></div>
+  </section>
+
+  <header class="tl-head">
+    <span class="kicker">The century, year by year</span>
+    <h2>Choose what happens</h2>
+    <p>The timeline starts on the route that is most likely, based on today's evidence. At each crossroads, you see a rough chance for each option. Choose another option to see where it leads.</p>
   </header>
 
   <div class="bar" id="bar">
@@ -1120,6 +1206,7 @@ footer ul { margin: 0; padding-left: 20px; display: grid; gap: 3px; }
     requestAnimationFrame(function () {
       ticking = false;
       var sy = window.scrollY, bh = barH();
+      document.getElementById("rail").style.visibility = sy + window.innerHeight * 0.6 > tlTopDoc ? "visible" : "hidden";
       targetYear = yearAtF(sy + bh + 24);
       var y = Math.floor(targetYear), yb = Math.floor(yearAtF(sy + window.innerHeight - 10));
       var rr = document.getElementById("revealRect");
@@ -1554,6 +1641,211 @@ footer ul { margin: 0; padding-left: 20px; display: grid; gap: 3px; }
       if (btn) btn.focus({ preventScroll: true });
     }
   }
+
+  /* ---------- Opening: a TV that switches channels between voices ---------- */
+  // QUOTES and MUSK_SOURCES come from quotes.md in the deep-think session (verified wording and sources).
+  var QUOTES = [
+    {
+      "who": "Elon Musk",
+      "role": "CEO, Tesla and xAI",
+      "when": "January 2026",
+      "venue": "Moonshots podcast",
+      "quote": "I'm confident that by 2030 AI will exceed the intelligence of all humans combined.",
+      "url": "https://fortune.com/2026/01/13/elon-musk-future-of-work-predictions-retirement-lifespan-robot-surgeons/"
+    },
+    {
+      "who": "Sam Altman",
+      "role": "CEO, OpenAI",
+      "when": "September 2024",
+      "venue": "The Intelligence Age",
+      "quote": "It is possible that we will have superintelligence in a few thousand days (!); it may take longer, but I'm confident we'll get there.",
+      "url": "https://ia.samaltman.com/"
+    },
+    {
+      "who": "Dario Amodei",
+      "role": "CEO, Anthropic",
+      "when": "October 2024",
+      "venue": "Machines of Loving Grace",
+      "quote": "…giving us the next 50-100 years of biological progress in 5-10 years.",
+      "url": "https://www.darioamodei.com/essay/machines-of-loving-grace"
+    },
+    {
+      "who": "Demis Hassabis",
+      "role": "CEO, Google DeepMind",
+      "when": "April 2025",
+      "venue": "60 Minutes, CBS",
+      "quote": "The end of disease? — I think that's within reach. Maybe within the next decade or so, I don't see why not.",
+      "url": "https://www.cbsnews.com/news/artificial-intelligence-google-deepmind-ceo-demis-hassabis-60-minutes-transcript/"
+    },
+    {
+      "who": "Bill Gates",
+      "role": "Co-founder, Microsoft",
+      "when": "March 2025",
+      "venue": "The Tonight Show",
+      "quote": "Will we need humans? — Not for most things.",
+      "url": "https://www.cnbc.com/2025/03/26/bill-gates-on-ai-humans-wont-be-needed-for-most-things.html"
+    },
+    {
+      "who": "Elon Musk",
+      "role": "CEO, Tesla and xAI",
+      "when": "November 2025",
+      "venue": "U.S.-Saudi Investment Forum",
+      "quote": "My prediction is that work will be optional. It'll be like playing sports or a video game…",
+      "url": "https://fortune.com/2025/11/20/elon-musk-tesla-ai-work-optional-money-irrelevant/"
+    },
+    {
+      "who": "Geoffrey Hinton",
+      "role": "Nobel laureate in physics",
+      "when": "December 2024",
+      "venue": "Nobel Prize banquet speech",
+      "quote": "There is also a longer term existential threat that will arise when we create digital beings that are more intelligent than ourselves.",
+      "url": "https://www.nobelprize.org/prizes/physics/2024/hinton/speech/"
+    },
+    {
+      "who": "Daron Acemoglu",
+      "role": "MIT economist, Nobel laureate",
+      "when": "December 2024",
+      "venue": "MIT News",
+      "quote": "I don't think we should belittle 0.5 percent in 10 years. … But it's just disappointing relative to the promises…",
+      "url": "https://news.mit.edu/2024/what-do-we-know-about-economics-ai-1206"
+    }
+  ];
+  var MUSK_SOURCES = [{"label": "Fortune, January 2026", "url": "https://fortune.com/2026/01/13/elon-musk-future-of-work-predictions-retirement-lifespan-robot-surgeons/"}, {"label": "Fortune, November 2025", "url": "https://fortune.com/2025/11/20/elon-musk-tesla-ai-work-optional-money-irrelevant/"}, {"label": "Business Today, August 2026", "url": "https://www.businesstoday.in/technology/artificial-intelligence/story/elon-musk-says-ai-could-become-superhuman-by-2027-perform-almost-anything-in-the-digital-world-552243-2026-08-31"}, {"label": "Quartz, October 2024", "url": "https://qz.com/elon-musk-tesla-optimus-robots-outnumber-humans-1851683997"}];
+  var TVN = 0, tvIdx = -1, tvVisible = true;
+  function buildTV() {
+    var html = '<div class="tv-card" data-i="0"><h1>The AI Century</h1>' +
+      '<p class="tv-lede">Some of the most powerful people in technology say that AI will change everything within ten years.</p>' +
+      '<p class="tv-by">A scenario timeline, 2026 to 2126 · by <a href="https://emilsoman.com">Emil Soman</a></p></div>';
+    QUOTES.forEach(function (q, i) {
+      html += '<div class="tv-card" data-i="' + (i + 1) + '"><p class="tv-q">“' + esc(q.quote) + '”</p>' +
+        '<p class="tv-who"><b>' + esc(q.who) + '</b> · ' + esc(q.role) + '<br>' + esc(q.venue) + ', ' + esc(q.when) +
+        ' · <a href="' + esc(q.url) + '" target="_blank" rel="noopener">Source</a></p></div>';
+    });
+    html += '<div class="tv-card" data-i="' + (QUOTES.length + 1) + '"><p class="tv-q">If they are right, what has to happen first?</p>' +
+      '<p class="tv-who">Next: the future as Elon Musk tells it, then stretched to fit the evidence.</p></div>';
+    document.getElementById("tvCards").innerHTML = html;
+    TVN = QUOTES.length + 2;
+    document.getElementById("tv").style.height = (TVN * 70 + 100) + "vh";
+    var src = MUSK_SOURCES.map(function (m) { return '<a href="' + esc(m.url) + '" target="_blank" rel="noopener">' + esc(m.label) + '</a>'; });
+    document.getElementById("promiseSrc").innerHTML = src.length ? "Sources: " + src.join(" · ") : "";
+  }
+  function tvUpdate() {
+    var tv = document.getElementById("tv"), r = tv.getBoundingClientRect(), range = Math.max(1, tv.offsetHeight - window.innerHeight);
+    tvVisible = r.bottom > 0 && r.top < window.innerHeight;
+    var i = Math.min(TVN - 1, Math.floor(clamp(-r.top / range, 0, 0.9999) * TVN));
+    if (i === tvIdx) return;
+    var screen = document.getElementById("tvScreen");
+    document.querySelectorAll("#tvCards .tv-card").forEach(function (c) { c.classList.toggle("on", +c.dataset.i === i); });
+    document.getElementById("tvCh").textContent = "CH " + (i + 1 < 10 ? "0" : "") + (i + 1);
+    var q = QUOTES[i - 1];
+    document.getElementById("tvDate").textContent = q ? q.when : "2026";
+    document.getElementById("tvCue").style.visibility = i === TVN - 1 ? "hidden" : "visible";
+    if (tvIdx >= 0 && !REDUCED) { screen.classList.remove("glitch"); void screen.offsetWidth; screen.classList.add("glitch"); }
+    tvIdx = i;
+  }
+  var grain = document.getElementById("tvGrain"), gctx = grain.getContext("2d"), gimg = null, gLast = 0;
+  function drawGrain() {
+    if (!gimg) { grain.width = 480; grain.height = 300; gimg = gctx.createImageData(480, 300); }
+    var d = gimg.data;
+    for (var i = 0; i < d.length; i += 4) { var v = Math.random() * 255 | 0; d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255; }
+    gctx.putImageData(gimg, 0, 0);
+  }
+  function grainLoop(ts) {
+    if (tvVisible && ts - gLast > 70) { drawGrain(); gLast = ts; }
+    requestAnimationFrame(grainLoop);
+  }
+
+  /* ---------- The promise, stretched to fit the evidence ---------- */
+  // m: Musk's year (position), r: the year that the evidence supports, matching the timeline below.
+  var MILES = [
+    { t: "Smarter than any human", ml: "end of 2026, or 2027", m: 2027, r: 2031, rl: "about 2030–32", rs: "2030–32", short: "Smarter than humans", note: "If progress keeps its speed: about 45%",
+      needs: ["AI agents that do week-long tasks reliably. In 2026, the best agents are reliable only on tasks of about 3 hours.",
+              "AI revenue that pays for about $1 trillion of spending a year. In 2026, revenue is less than a tenth of spending.",
+              "Power for the data centres. New grid connections take 5 to 7 years."] },
+    { t: "Superhuman at all digital work", ml: "end of 2027", m: 2028, r: 2033, rl: "about 2031–35", rs: "2031–35", short: "Superhuman digital work", note: "Only on the fast path: about 45%",
+      needs: ["AI that does most of its own research.",
+              "Companies that rebuild their work around AI agents, not only add them.",
+              "Rules in medicine, law and finance that let AI work without a human sign-off."] },
+    { t: "Robots better than top surgeons", ml: "about 2029–30", m: 2029.5, r: 2043, rl: "2040s at the earliest", rs: "2040s+", short: "Robot surgeons", note: "Our estimate, low confidence",
+      needs: ["Robot hands with fine touch, and safe behaviour in rare cases.",
+              "Clinical trials and approval by regulators, which take years for each new device.",
+              "Rules for who is responsible when a robot makes an error."] },
+    { t: "Over 1 billion humanoid robots", ml: "about 2036", m: 2036, r: 2065, rl: "2060s or later", rs: "2060s+", short: "1B+ robots", note: "1 million at work about 2037, 1 million in homes about 2045",
+      needs: ["Factories at the scale of car factories. The world makes about 90 million cars a year.",
+              "Robots that are useful in messy homes, not only in factories.",
+              "In the first half of 2026, about 20,000 humanoid robots shipped, mostly from China. Musk says there will be more robots than people by 2040."] },
+    { t: "Work becomes optional", ml: "within 10–20 years", m: 2040, r: 2058, rl: "2050s–60s, on one route only", rs: "2050s–60s", short: "Work optional", note: "Basic needs covered about 2050, and work optional in the 2060s, only on the Shared Abundance route: about 1 in 5",
+      needs: ["Public ownership of part of AI and compute, through taxes or funds.",
+              "A political fight that voters win. Alaska's oil fund took 6 years to pay its first dividend.",
+              "Lower prices for goods and services. A dividend of $400 a month in the US costs about 4 to 5% of GDP."] }
+  ];
+  function buildGaps() {
+    document.getElementById("gapList").innerHTML = MILES.map(function (g) {
+      return '<article class="gap"><h3>' + esc(g.t) + '</h3><p class="said">Musk: ' + esc(g.ml) + '</p><ul>' +
+        g.needs.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join("") + '</ul>' +
+        '<p class="est">Evidence: ' + esc(g.rl) + '. ' + esc(g.note) + '.</p></article>';
+    }).join("");
+  }
+  function stUpdate() {
+    var sec = document.getElementById("stretch"), svg = document.getElementById("stSvg");
+    var r = sec.getBoundingClientRect(), range = Math.max(1, sec.offsetHeight - window.innerHeight);
+    if (r.bottom < 0 || r.top > window.innerHeight) return;
+    var p = clamp(-r.top / range, 0, 1), s = clamp((p - 0.15) / 0.6, 0, 1);
+    s = s * s * (3 - 2 * s);
+    var box = svg.getBoundingClientRect(), W = box.width, H = box.height;
+    if (!W || !H) return;
+    var narrow = W < 520, xL = W * (narrow ? 0.24 : 0.3), xR = W * (narrow ? 0.47 : 0.66), y0 = 34, y1 = H - 8;
+    var E = 2046 + (2126 - 2046) * s;
+    function Y(y) { return y0 + (y - 2026) / (E - 2026) * (y1 - y0); }
+    var out = '<text class="st-head" x="' + (narrow ? xL + 6 : xL) + '" y="14" text-anchor="' + (narrow ? 'end' : 'middle') + '">AS TOLD</text>' +
+      '<text class="st-head" x="' + (narrow ? xR - 6 : xR) + '" y="14" text-anchor="' + (narrow ? 'start' : 'middle') + '">WHAT IT TAKES</text>';
+    var step = E - 2026 <= 24 ? 4 : E - 2026 <= 50 ? 5 : 10;
+    for (var yr = 2026; yr <= E + 0.01; yr += step) {
+      var ty = Y(yr);
+      out += '<line class="st-tick" x1="' + (xL + 8) + '" y1="' + ty + '" x2="' + (xR - 8) + '" y2="' + ty + '"/>' +
+        '<text class="st-yr" x="' + ((xL + xR) / 2) + '" y="' + (ty - 3) + '">' + yr + '</text>';
+    }
+    out += '<line class="st-axis" x1="' + xL + '" y1="' + y0 + '" x2="' + xL + '" y2="' + y1 + '"/><line class="st-axis" x1="' + xR + '" y1="' + y0 + '" x2="' + xR + '" y2="' + y1 + '"/>';
+    var lh = 38, fs = narrow ? 12 : 13, leftAlpha = 1 - clamp((s - 0.35) / 0.3, 0, 1), subA = clamp(s * 1.5, 0, 1);
+    var pts = MILES.map(function (g) { return { g: g, ym: Y(g.m), yr: Y(g.m + (g.r - g.m) * s) }; });
+    pts.forEach(function (q) {
+      out += '<path class="st-link" d="M' + xL + ' ' + q.ym + ' C' + ((xL + xR) / 2) + ' ' + q.ym + ' ' + ((xL + xR) / 2) + ' ' + q.yr + ' ' + xR + ' ' + q.yr + '"/>' +
+        '<circle cx="' + xL + '" cy="' + q.ym + '" r="4.5" fill="#1a1a1a"/>' +
+        '<text class="st-lab" x="' + (xL - 10) + '" y="' + (q.ym + 4) + '" text-anchor="end" style="font-size:' + fs + 'px;opacity:' + leftAlpha + '">' + esc(narrow ? q.g.ml : q.g.t + " · " + q.g.ml) + '</text>';
+    });
+    // Right labels in date order. Push down to avoid overlap, with a short line back to the marker.
+    var last = -1e9;
+    pts.slice().sort(function (a, b) { return a.yr - b.yr; }).forEach(function (q) {
+      var ly = Math.max(q.yr, last + lh); last = ly;
+      var lx = xR + 14;
+      if (ly - q.yr > 2) out += '<path d="M' + (xR + 5) + ' ' + q.yr + ' L' + (xR + 10) + ' ' + ly + '" fill="none" stroke="#1a1a1a" stroke-width="1"/>';
+      out += '<circle cx="' + xR + '" cy="' + q.yr + '" r="5" fill="#fff" stroke="#1a1a1a" stroke-width="2"/>' +
+        '<text class="st-lab" x="' + lx + '" y="' + (ly + 4) + '" style="font-size:' + fs + 'px;opacity:' + clamp(s * 4, 0, 1) + '">' + esc(narrow ? q.g.short : q.g.t) + '</text>' +
+        '<text class="st-sub" x="' + lx + '" y="' + (ly + 19) + '" style="opacity:' + subA + '">' + esc(narrow ? q.g.rs : q.g.rl) + '</text>';
+    });
+    if (leftAlpha < 1) {
+      var yb = Y(2027), ye = Y(2040);
+      out += '<path d="M' + (xL - 14) + ' ' + yb + ' L' + (xL - 20) + ' ' + yb + ' L' + (xL - 20) + ' ' + ye + ' L' + (xL - 14) + ' ' + ye + '" fill="none" stroke="#1a1a1a" stroke-width="1.2" style="opacity:' + (1 - leftAlpha) + '"/>' +
+        '<text class="st-lab" x="' + (xL - 26) + '" y="' + ((yb + ye) / 2 + 4) + '" text-anchor="end" style="font-size:' + fs + 'px;opacity:' + (1 - leftAlpha) + '">' + (narrow ? 'All by 2040' : 'All of it by about 2040') + '</text>';
+    }
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+    svg.innerHTML = out;
+    var cap = s < 0.02 ? ['As told, almost everything happens by about 2040.', 'Musk’s dates from interviews in 2024–2026. Scroll to stretch the timeline.']
+      : s < 0.98 ? ['Stretch time to fit what has to happen first.', 'Each promise moves to the date that the evidence supports.']
+      : ['Most of it is possible. Most of it takes decades, not years.', 'The details are below. Then choose your own route through the century.'];
+    document.getElementById("stCap").innerHTML = esc(cap[0]) + '<span>' + esc(cap[1]) + '</span>';
+  }
+  var introTick = false;
+  function introScroll() {
+    if (introTick) return; introTick = true;
+    requestAnimationFrame(function () { introTick = false; tvUpdate(); stUpdate(); });
+  }
+  buildTV(); buildGaps();
+  document.getElementById("stretch").style.height = "330vh";
+  window.addEventListener("scroll", introScroll, { passive: true });
+  window.addEventListener("resize", introScroll);
+  tvUpdate(); stUpdate();
+  if (REDUCED) drawGrain(); else requestAnimationFrame(grainLoop);
 
   readColors();
   drawJumps();
